@@ -32,10 +32,10 @@ foodApp.events = function () {
 
 foodApp.apiKeyUSDA = 'TqiCp1WcVXZzchDeT3DL0M8mk2OrOirzhkXgTrwa';
 
+foodApp.nutrientsArr = [];
 // Make Ajax API query of the search term and get all of the NDBNO values for the results
 
 foodApp.getFoodItems = function (search) {
-    let nutrientsArr = [];
     const foodItemPromise = $.ajax({
         url: 'http://api.nal.usda.gov/ndb/',
         datatype: 'json',
@@ -75,9 +75,13 @@ foodApp.getFoodItems = function (search) {
         .then((...res) => {
             // console.log(res[1][0].report.foods[0]);
             // console.log(res);
-            nutrientsArr = res.map((elem) => {
+            const nutrientsArr = res.map((elem) => {
                 return elem[0].report.foods[0];
             });
+
+            foodApp.nutrientsArr = nutrientsArr;
+
+            
         });
 
     });
