@@ -141,10 +141,7 @@ foodApp.displayNutritionalInfo = function (res) {
     });
     // Displays the results
     $('#nutrientListNames').append(foodNutrientsHTML);
-
-}
-
-// User enters search query and selects nutritional info
+};
 
 // Erase any current html in aside list and main section
 foodApp.clearDOM = function () {
