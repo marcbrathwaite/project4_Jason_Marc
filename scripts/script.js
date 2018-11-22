@@ -32,7 +32,6 @@ foodApp.events = function () {
 
 foodApp.apiKeyUSDA = 'TqiCp1WcVXZzchDeT3DL0M8mk2OrOirzhkXgTrwa';
 
-foodApp.nutrientsArr = [];
 // Make Ajax API query of the search term and get all of the NDBNO values for the results
 
 foodApp.getFoodItems = function (search) {
@@ -73,13 +72,31 @@ foodApp.getFoodItems = function (search) {
 
         $.when(...nutrientPromises)
         .then((...res) => {
-            // console.log(res[1][0].report.foods[0]);
-            // console.log(res);
             const nutrientsArr = res.map((elem) => {
                 return elem[0].report.foods[0];
             });
 
+
+            //Store all Nutrients in an Array 
             foodApp.nutrientsArr = nutrientsArr;
+            //Find out number of pages
+            foodApp.numofPages = Math.ceil(foodApp.nutrientsArr.length / 12);
+
+            let start = 0;
+            let end = 12;
+
+            foodApp.pages = [];
+
+            for (let i=0; i < foodApp.numofPages; i++) {
+                foodApp.pages.push(foodApp.nutrientsArr.slice(start, end));
+                start = end;
+                end += 12;
+            }
+
+
+            //Display nutrional info for 12 items
+
+
 
             
         });
@@ -87,40 +104,7 @@ foodApp.getFoodItems = function (search) {
     });
 };
 
-//Takes an array of NDBNOs and returns an array of promises
-// foodApp.getFoodNutrients = function (ndbnoArr) {
-//     return ndbnoArr.map((elem) => {
-//         return $.ajax({
-//             url: 'https://api.nal.usda.gov/ndb/nutrients',
-//             dataType: 'json',
-//             method: 'GET',
-//             data: {
-//                 api_key: foodApp.apiKeyUSDA,
-//                 format: 'json',
-//                 lt: 'n',
-//                 ndbno: elem,
-//                 nutrients: ['208', '204', '601', '307', '205', '291', '269', '203']
-//             }
-//         });
-//     });
-// }
 
-// Create ajax for USDA nutrients API and pass ndbno into query
-
-// foodApp.getFoodNutrients = function(search){
-//     return $.ajax({
-//         url: 'https://api.nal.usda.gov/ndb/nutrients',
-//         dataType: 'json',
-//         method: 'GET',
-//         data: {
-//             api_key: foodApp.apiKeyUSDA,
-//             format: 'json',
-//             lt: 'n',
-//             ndbno: search,
-//             nutrients: ['208', '204', '601', '307', '205', '291', '269', '203']
-//         }   
-//     }); 
-// }
 
 // Recieves promise and display callback function, and displays appropriate info
 
@@ -131,17 +115,21 @@ foodApp.makeAPIRequest = function (promise, fn) {
 };
 
 
-foodApp.displayNutritionalInfo = function (res) {
+foodApp.displayNutritionalInfo = function (arr) {
 
-    console.log(res);
-    let foodNutrientsHTML = `<ul class="nutrientList">`;
+
+
+    // let foodNutrientsHTML = `<ul class="nutrientList">`;
     // Itterates through nutrients and creates HTML for food info section
-    res.forEach((elm) => {
+    // res.forEach((elm) => {
 
-    });
+    // });
     // Displays the results
-    $('#nutrientListNames').append(foodNutrientsHTML);
-};
+    // $('#nutrientListNames').append(foodNutrientsHTML);
+
+}
+
+// User enters search query and selects nutritional info
 
 // Erase any current html in aside list and main section
 foodApp.clearDOM = function () {
