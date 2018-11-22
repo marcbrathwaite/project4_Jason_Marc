@@ -9,15 +9,19 @@
 </head>
 <body>
     <header>
-
+        
+        <form action="" id="searchForm">
+            <label for="nutrition">Nutrional Information</label>
+            <input type="radio" id="nutrition" value="nutrition" name="searchType" checked>
+            
+            <label for="recipe">Recipes</label>
+            <input type="radio" id="recipe" value="recipe" name="searchType">
+    
+            <input type="search" name="q" id="searchField">
+            <input type="submit" id="submitBtn">
+        </form>
     </header>
     <main>
-        <section>
-            <form action="" id="searchForm">
-                <input type="search" name="q" id="searchField">
-                <input type="submit" id="submitBtn">
-            </form>
-        </section>
         <section class="mainContent">
             <aside class="foodList">
                 <ul id="resultsList">
