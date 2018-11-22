@@ -1,0 +1,8 @@
+.mainContent {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  .mainContent .foodList {
+    width: 20%; }
+  .mainContent .foodInfo {
+    width: 70%; }
