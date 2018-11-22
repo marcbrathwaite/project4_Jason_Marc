@@ -22,7 +22,7 @@ foodApp.events = function(){
         // Make API request and retrieve food items
         foodApp.makeAPIRequest(promise, foodApp.displayFoodItem);
     });
-// WHen user clicks on food item on result list
+// When user clicks on food item on result list
     $('#resultsList').on('click', 'li', function(){
         // Clear current results
         $('#nutrientListNames').empty();
@@ -111,37 +111,12 @@ foodApp.displayNutritionalInfo = function(res) {
     });
     // Displays the results
     $('#nutrientListNames').append(foodNutrientsHTML);
-
-}
-
-// User enters search query and selects nutritional info
+};
 
     // Erase any current html in aside list and main section
     foodApp.clearDOM = function(){
         $('#resultsList').empty();
     }
-
-    // Create preloader while user waits for results
-
-    // Take results and add to DOM (append to <ul>). Unique ndbno added as ID for each <li>
-
-// User recieves list of results related to search query
-
-// User chooses from list
-
-    // Check value of selection variable 
-
-    // Create ajax for USDA nutrient API and pass value of ID:clicked into ndbno
-
-    // ????? picture
-
-    // Take results from nutrients and add to DOM
-
-// User recieves picture from Unsplash(?) and nutritional info 
-
-
-
-
 
 
 // User enters search query and selects recipes
