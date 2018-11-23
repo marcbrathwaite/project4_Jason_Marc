@@ -4,10 +4,11 @@
         border: none;
         background-color: rgba(0,0,0,0);
         font-size: 6rem;
+        // position:fixed;
         position: absolute;
         top: 48%;
         display:none;
-        // transform: translateY(-50%);
+        transform: translateY(-50%);
         &--next {
             right: -45px;
         }
@@ -58,6 +59,9 @@
                 flex-direction: column;
                 justify-content: center;
             }
+        }
+        &--Block {
+            display:none;
         }
     }
 

@@ -168,11 +168,14 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
   position: relative; }
   .mainContent .pageButton {
     border: none;
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0);
     font-size: 6rem;
     position: absolute;
     top: 48%;
-    display: none; }
+    display: none;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%); }
     .mainContent .pageButton--next {
       right: -45px; }
     .mainContent .pageButton--prev {
@@ -233,6 +236,8 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
         -webkit-box-pack: center;
         -ms-flex-pack: center;
         justify-content: center; }
+    .mainContent .nutrientList--Block {
+      display: none; }
   .mainContent .nutrientLabel {
     border: 1px solid black;
     border-top: none;
