@@ -27,6 +27,7 @@ foodApp.events = function () {
             foodApp.getRecipeItems(searchTerm);
 
         }
+        
         // Clear search field
         $('#searchField').val('');
 
@@ -52,13 +53,22 @@ foodApp.events = function () {
     })
 
     //Click prev arrow
-    $('').on('click', function () {
+    $('.mainContent').on('click', '.pageButton--prev', function () {
         //Clear the dom
+        foodApp.clearDOM();
         //Decrease page counter
+        foodApp.currentPage--;
 
         //Display content on page
+        foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage);
+
         //Display next arrow if page counter === pages.length - 1
+        $('.pageButton--next').show();
+
         //Hide prev arrow if page counter === 0
+        if (foodApp.currentPage === 0) {
+            $('.pageButton--prev').hide();
+        }
 
     })
 }
