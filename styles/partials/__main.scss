@@ -25,6 +25,12 @@
         &__Container {
         width: calc(33.33% - 40px);
         padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        }
+        &__header {
+            flex-grow: 1;
         }
         li {
             list-style: none;
@@ -35,23 +41,30 @@
             text-align: center;
             color: white;
             line-height: 1.3;
+            height: 100%;
             // font-weight: bold;
             // padding: 25px;
             // border: 1px solid #000
-            background: url(../../assets/food-label-background.jpg);
+            background: url(../assets/food-label-background.jpg);
             // Photo by Carissa Gan on Unsplash: https://unsplash.com/photos/KSXvrqKUxnc
             background-size: cover;
             background-position: center;
             &--overlay {
                 background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.4));
                 padding: 25px;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
             }
         }
     }
 
     .nutrientLabel {
         border: 1px solid black;
+        border-top: none;
         padding: 20px;
+        padding-top: 40px;
         &__Title {
             font-size: 2.2rem;
             text-transform: uppercase;
