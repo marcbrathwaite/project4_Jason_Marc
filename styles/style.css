@@ -171,7 +171,8 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
     background-color: rgba(0, 0, 0, 0);
     font-size: 6rem;
     position: absolute;
-    top: 47%; }
+    top: 47%;
+    display: none; }
     .mainContent .pageButton--next {
       right: -45px; }
     .mainContent .pageButton--prev {

@@ -33,15 +33,21 @@ foodApp.events = function () {
     });
 
     //Click next arrow
-    $('').on('click', function () {
+    $('.mainContent').on('click', '.pageButton--next', function () {
         //Clear the dom
-        //Increment page counter
-
+        foodApp.clearDOM();
+        //Increment current page
+        foodApp.currentPage++;
         //Display content on page
+        foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage);
 
         //Display prev arrow if page counter == 1
+        $('.pageButton--prev').show();
 
-        //Hide next arrow if page counter === pages.length
+        //Hide next arrow if current page === pages.length
+        if (foodApp.currentPage === foodApp.pages.length - 1) {
+            $('.pageButton--next').hide();
+        }
 
     })
 
@@ -168,6 +174,10 @@ foodApp.getFoodItems = function (search) {
                     foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
 
                     //Display next key arrow if length of pages is more than 1 
+                    if (foodApp.numofPages > 0) {
+                        $('.pageButton--next').show();
+                    }
+
 
                 });
 
@@ -176,12 +186,12 @@ foodApp.getFoodItems = function (search) {
 
 foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
-    let foodNutrientsHTML = `<ul class="nutrientList">`;
+    let foodNutrientsHTML = '';
 
     arr[arrIndex].forEach((elem) => {
-        const name = elem.name.replace(/GTIN:\s*\d*|UPC:\s*\d*/ig, '')
+        const shortName = elem.name.replace(/\,\s*GTIN:\s*\d*|\,\s*UPC:\s*\d*/ig, '')
             .replace(/amp\;/ig, '')
-            .replace(/^([a-zA-Z0-9\&\\\:\,\'\/\; ]{60})([a-zA-Z0-9\&\\\,\:\;\'\/ ]*)/ig, (matchedString, first, second) => {
+            .replace(/^([\w\&\\\:\,\'\/\; ]{60})([\w\&\\\,\:\;\'\/ ]*)/ig, (matchedString, first, second) => {
                 return `${first}...`;
             });
 
@@ -197,8 +207,8 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
         foodNutrientsHTML +=
             `<li class="nutrientList__Container">
-           <ul>
-             <li class="nutrientList__FoodName"><p class="nutrientList__FoodName--overlay">${name}</p></li>
+           <ul class="nutrientList__header">
+             <li class="nutrientList__FoodName"><p class="nutrientList__FoodName--overlay" title="${elem.name}"><span>${shortName}</span></p><</li>
            </ul>
            <ul class="nutrientLabel">
              <li class="nutrientLabel__Title">Nutrition facts</li>
@@ -220,9 +230,9 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
         `;
     });
 
-    foodNutrientsHTML += `</ul>`;
+    // foodNutrientsHTML += `</ul>`;
 
-    $('.mainContent').append(foodNutrientsHTML);
+    $('.nutrientList').append(foodNutrientsHTML);
 
 }
 
@@ -292,7 +302,7 @@ foodApp.makeAPIRequest = function (promise, fn) {
 
 // Erase any current html in aside list and main section
 foodApp.clearDOM = function () {
-    $('.mainContent').empty();
+    $('.nutrientList').empty();
 }
 
 // Create preloader while user waits for results
