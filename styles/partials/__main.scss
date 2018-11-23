@@ -1,0 +1,63 @@
+.mainContent {
+    .nutrientList {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        justify-content: space-between;
+        // text-align: center;
+        &__Container {
+        width: calc(33.33% - 40px);
+        padding: 20px;
+        }
+        li {
+            list-style: none;
+        }
+        &__FoodName {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-align: center;
+            color: white;
+            line-height: 1.3;
+            // font-weight: bold;
+            // padding: 25px;
+            // border: 1px solid #000
+            background: url(../../assets/food-label-background.jpg);
+            background-size: cover;
+            background-position: center;
+            &--overlay {
+                background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.4));
+                padding: 25px;
+            }
+        }
+    }
+
+    .nutrientLabel {
+        border: 1px solid black;
+        padding: 20px;
+        &__Title {
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            // padding-top: 25px;
+        }
+        &__Serving {
+            margin: 5px 0;
+        }
+        hr {
+            margin-right: 10px;
+            border-top: 5px solid #000;
+        }
+        &__Nutrient {
+            letter-spacing: 2px;
+            line-height: 1.6;
+            font-weight: bold;
+            &--indent {
+                padding-left: 30px;
+                font-weight: normal;
+            }
+            &--measurement {
+                font-weight: normal;
+            }
+        }
+    }
+}

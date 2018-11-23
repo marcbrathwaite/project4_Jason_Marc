@@ -1,9 +1,5 @@
-.mainContent {
-    .nutrientList {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    .nutrientLabel {
-        width: 33.33%;
-    }
-}
+@import "./partials/_setup";
+@import "./partials/_global";
+@import "./partials/_header";
+@import "./partials/_main";
+@import "./partials/_footer";
