@@ -33,15 +33,21 @@ foodApp.events = function () {
     });
 
     //Click next arrow
-    $('').on('click', function () {
+    $('.mainContent').on('click', '.pageButton--next', function () {
         //Clear the dom
-        //Increment page counter
-
+        foodApp.clearDOM();
+        //Increment current page
+        foodApp.currentPage++;
         //Display content on page
+        foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage);
 
         //Display prev arrow if page counter == 1
+        $('.pageButton--prev').show();
 
-        //Hide next arrow if page counter === pages.length
+        //Hide next arrow if current page === pages.length
+        if (foodApp.currentPage === foodApp.pages.length - 1) {
+            $('.pageButton--next').hide();
+        }
 
     })
 
@@ -59,6 +65,44 @@ foodApp.events = function () {
 
 foodApp.apiKeyUSDA = 'TqiCp1WcVXZzchDeT3DL0M8mk2OrOirzhkXgTrwa';
 
+//Array of arrays, each containing the what should be displayed on the correspoding page on the DOM
+foodApp.pages = [];
+
+//Array to store all results of searches
+foodApp.itemsArray = [];
+
+//Number of items which would be displayed per page
+foodApp.itemsPerPage = 6;
+
+//Variable for storing the number of pages of results
+foodApp.numofPages = 0;
+
+//Variable for keeping track of current page
+foodApp.currentPage = 0;
+
+//Method to determine number of pages of results after search
+foodApp.generatePages = function(objectArr) {
+    //Reset object parameters
+    foodApp.pages = [];
+    foodApp.numofPages = 0;
+    foodApp.currentPage = 0;
+    
+    foodApp.itemsArray = objectArr;
+
+    //Determine the number of results pages
+    foodApp.numofPages = Math.ceil(foodApp.itemsArray.length / foodApp.itemsPerPage);
+
+    let start = 0;
+    let end = foodApp.itemsPerPage;
+   
+    //Loops for putting results on appropriate pages
+    for (let i = 0; i < foodApp.numofPages; i++) {
+        foodApp.pages.push(foodApp.itemsArray.slice(start, end));
+        start = end;
+        end += foodApp.itemsPerPage;
+    }
+
+}
 
 
 //Function to query USDA database and display nutrient info for each result
@@ -107,33 +151,34 @@ foodApp.getFoodItems = function (search) {
                         return elem[0].report.foods[0];
                     });
 
+                    foodApp.generatePages(nutrientsArr);
+                    // foodApp.nutrientsArr = nutrientsArr;
+                    // foodApp.numofPages = Math.ceil(foodApp.nutrientsArr.length / 12);
 
-///////////////////MAKE A FUNCTION/////////////////
-                    //Store all Nutrients in an Array 
-                    foodApp.nutrientsArr = nutrientsArr;
-                    //Find out number of pages
-                    foodApp.numofPages = Math.ceil(foodApp.nutrientsArr.length / 12);
-
-                    let start = 0;
-                    let end = 12;
+                    // let start = 0;
+                    // let end = 12;
 
                     
-//Used to store arrays of nutrients objects per page
-foodApp.pages = [];
+                    // foodApp.pages = [];
 
-                    for (let i = 0; i < foodApp.numofPages; i++) {
-                        foodApp.pages.push(foodApp.nutrientsArr.slice(start, end));
-                        start = end;
-                        end += 12;
-                    }
+                    // for (let i = 0; i < foodApp.numofPages; i++) {
+                    //     foodApp.pages.push(foodApp.nutrientsArr.slice(start, end));
+                    //     start = end;
+                    //     end += 12;
+                    // }
 
-                    foodApp.currentPage = 0;
+                    // foodApp.currentPage = 0;
 
 
                     //Display first 12 food nutritional items
                     foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
 
                     //Display next key arrow if length of pages is more than 1 
+                    if (foodApp.numofPages > 0) {
+                        $('.pageButton--next').show();
+                    }
+
+
                 });
 
         });
@@ -141,17 +186,18 @@ foodApp.pages = [];
 
 foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
-    let foodNutrientsHTML = `<ul class="nutrientList">`;
+    let foodNutrientsHTML = '';
 
     arr[arrIndex].forEach((elem) => {
-        const name = elem.name.replace(/GTIN:\s*\d*|UPC:\s*\d*/ig, '')
+        const shortName = elem.name.replace(/\,\s*GTIN:\s*\d*|\,\s*UPC:\s*\d*/ig, '')
             .replace(/amp\;/ig, '')
-            .replace(/^([a-zA-Z0-9\&\\\:\,\'\/\; ]{60})([a-zA-Z0-9\&\\\,\:\;\'\/ ]*)/ig, (matchedString, first, second) => {
+            .replace(/^([\w\&\\\:\,\'\/\; ]{60})([\w\&\\\,\:\;\'\/ ]*)/ig, (matchedString, first, second) => {
                 return `${first}...`;
             });
 
         const sugarVal = `${elem.nutrients[0].value}${elem.nutrients[0].unit}`;
         const proteinVal = `${elem.nutrients[1].value}${elem.nutrients[1].unit}`;
+        
         const fatVal = `${elem.nutrients[2].value}${elem.nutrients[2].unit}`;
         const cholesterolVal = `${elem.nutrients[3].value}${elem.nutrients[3].unit}`;
         const carbVal = `${elem.nutrients[4].value}${elem.nutrients[4].unit}`;
@@ -160,26 +206,33 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
         const fibreVal = `${elem.nutrients[7].value}${elem.nutrients[7].unit}`;
 
         foodNutrientsHTML +=
-            `<li class="nutrientLabel">
-           <ul>
-             <li>${name}</li>
-             <li>${elem.measure} </li>
-             <li>Sugar ${sugarVal}</li>
-             <li>Protein ${proteinVal}</li>
-             <li>Fat ${fatVal}</li>
-             <li>Cholesterol ${cholesterolVal}</li>
-             <li>Carbohydrates ${carbVal}</li>
-             <li>Energy ${energyVal}</li>
-             <li>Sodium ${sodiumVal}</li>
-             <li>Fibre ${fibreVal}</li>
+            `<li class="nutrientList__Container">
+           <ul class="nutrientList__header">
+             <li class="nutrientList__FoodName"><p class="nutrientList__FoodName--overlay" title="${elem.name}"><span>${shortName}</span></p><</li>
+           </ul>
+           <ul class="nutrientLabel">
+             <li class="nutrientLabel__Title">Nutrition facts</li>
+             <li class="nutrientLabel__Serving">Serving size</li>
+             <li class="nutritionLabel__Measurement">${elem.measure} </li>
+             <li><hr></li>
+             <li class="nutrientLabel__Nutrient">Energy <span class="nutrientLabel__Nutrient--measurement">${energyVal}</span></li>
+             <li class="nutrientLabel__Nutrient">Fat <span class="nutrientLabel__Nutrient--measurement">${fatVal}</span></li>
+             <li class="nutrientLabel__Nutrient">Cholesterol <span class="nutrientLabel__Nutrient--measurement">${cholesterolVal}</span></li>
+             <li class="nutrientLabel__Nutrient">Sodium <span class="nutrientLabel__Nutrient--measurement">${sodiumVal}</span></li>
+             <li class="nutrientLabel__Nutrient">Carbohydrates <span class="nutrientLabel__Nutrient--measurement">${carbVal}</span></li>
+                <ul>
+                    <li class = "nutrientLabel__Nutrient nutrientLabel__Nutrient--indent"> Fibre  <span class = "nutrientLabel__Nutrient--measurement"> ${fibreVal} </span></li>
+                    <li class = "nutrientLabel__Nutrient nutrientLabel__Nutrient--indent"> Sugar <span class = "nutrientLabel__Nutrient--measurement"> ${sugarVal} </span></li>
+                </ul>
+             <li class="nutrientLabel__Nutrient">Protein<span class="nutrientLabel__Nutrient--measurement">${proteinVal}</span></li>
            </ul>
            </li>
         `;
     });
 
-    foodNutrientsHTML += `</ul>`;
+    // foodNutrientsHTML += `</ul>`;
 
-    $('.mainContent').append(foodNutrientsHTML);
+    $('.nutrientList').append(foodNutrientsHTML);
 
 }
 
@@ -198,12 +251,14 @@ foodApp.getRecipeItems = function (search) {
     // AJAX API request for Recipe search term
     $.when(recipeItemPromise)
         .then((res) => {
-			// console.log("​foodApp.getRecipeItems -> res", res);
+			
             //convert res to JSON object
             const resObj = JSON.parse(res);
             const recipeItemArray = resObj.recipes;
 
-///////////////////MAKE A FUNCTION/////////////////
+
+
+            foodApp.generatePages(recipeItemArr);
             //Store all recipes in an Array 
             foodApp.recipesArr = recipeItemArray;
             //Find out number of pages
@@ -212,10 +267,9 @@ foodApp.getRecipeItems = function (search) {
             let start = 0;
             let end = 12;
 
-            //Used to store arrays of nutrients objects per page
             foodApp.pages = [];
 
-            for (let i = 0; i < foodApp.numofPages; i++) {
+            for (let i = 0; i <foodApp.numofPages; i++) {
                 foodApp.pages.push(foodApp.recipesArr.slice(start, end));
                 start = end;
                 end += 12;
@@ -248,7 +302,7 @@ foodApp.makeAPIRequest = function (promise, fn) {
 
 // Erase any current html in aside list and main section
 foodApp.clearDOM = function () {
-    $('.mainContent').empty();
+    $('.nutrientList').empty();
 }
 
 // Create preloader while user waits for results
