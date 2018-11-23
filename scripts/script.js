@@ -12,9 +12,11 @@ foodApp.events = function () {
         event.preventDefault();
         // Clears display
         foodApp.clearDOM();
+        $('.pageButton--prev').hide();
+        $('.pageButton--next').hide();
+
         //Retrive value of Search Type radio button
         const searchType = $('input[type="radio"]:checked').val();
-        console.log("​foodApp.events -> searchType", searchType);
 
         // Retrieves seachTerm value from search box
         const searchTerm = $('#searchField').val();
@@ -27,6 +29,10 @@ foodApp.events = function () {
             foodApp.getRecipeItems(searchTerm);
 
         }
+        //Make function
+        $('html, body').animate({
+            scrollTop: $('.mainContent').offset().top
+        }, 1500);
         
         // Clear search field
         $('#searchField').val('');
@@ -42,8 +48,12 @@ foodApp.events = function () {
         //Display content on page
         foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage);
 
+        $('html, body').animate({
+            scrollTop: $('.mainContent').offset().top
+        }, 1000);
+
         //Display prev arrow if page counter == 1
-        $('.pageButton--prev').show();
+        $('.pageButton--prev').show('1000');
 
         //Hide next arrow if current page === pages.length
         if (foodApp.currentPage === foodApp.pages.length - 1) {
@@ -62,8 +72,12 @@ foodApp.events = function () {
         //Display content on page
         foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage);
 
+        $('html, body').animate({
+            scrollTop: $('.mainContent').offset().top
+        }, 1000);
+
         //Display next arrow if page counter === pages.length - 1
-        $('.pageButton--next').show();
+        $('.pageButton--next').show('1000');
 
         //Hide prev arrow if page counter === 0
         if (foodApp.currentPage === 0) {
@@ -162,31 +176,66 @@ foodApp.getFoodItems = function (search) {
                     });
 
                     foodApp.generatePages(nutrientsArr);
-                    // foodApp.nutrientsArr = nutrientsArr;
-                    // foodApp.numofPages = Math.ceil(foodApp.nutrientsArr.length / 12);
-
-                    // let start = 0;
-                    // let end = 12;
-
-                    
-                    // foodApp.pages = [];
-
-                    // for (let i = 0; i < foodApp.numofPages; i++) {
-                    //     foodApp.pages.push(foodApp.nutrientsArr.slice(start, end));
-                    //     start = end;
-                    //     end += 12;
-                    // }
-
-                    // foodApp.currentPage = 0;
-
-
-                    //Display first 12 food nutritional items
                     foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
 
                     //Display next key arrow if length of pages is more than 1 
                     if (foodApp.numofPages > 0) {
-                        $('.pageButton--next').show();
+                        $('.pageButton--next').show('1500');
                     }
+
+
+                });
+
+        });
+};
+
+foodApp.getFoodItems2 = function (search) {
+    const foodItemPromise = $.ajax({
+        url: 'http://api.nal.usda.gov/ndb/',
+        datatype: 'json',
+        method: 'GET',
+        data: {
+            api_key: foodApp.apiKeyUSDA,
+            format: 'json',
+            q: search,
+            max: 50,
+            nutrients: 'y'
+        }
+    });
+
+    //AJAX API request for Foot Item search term to get ndbno numbers
+    $.when(foodItemPromise)
+        .then((res) => {
+            const foodItemArray = res.list.item;
+            //Generate an array of ndbno numbers
+            const ndbnoArr = foodItemArray.map((elem) => {
+                return elem['ndbno'];
+            });
+
+            //Generate an array of promises with ndbno search
+            const nutrientPromises = ndbnoArr.map((elem) => {
+                return $.ajax({
+                    url: 'https://api.nal.usda.gov/ndb/nutrients',
+                    dataType: 'json',
+                    method: 'GET',
+                    data: {
+                        api_key: foodApp.apiKeyUSDA,
+                        format: 'json',
+                        lt: 'n',
+                        ndbno: elem,
+                        nutrients: ['208', '204', '601', '307', '205', '291', '269', '203']
+                    }
+                });
+            });
+
+            $.when(...nutrientPromises)
+                .then((...res) => {
+                    const nutrientsArr = res.map((elem) => {
+                        return elem[0].report.foods[0];
+                    });
+
+                    foodApp.generatePages(nutrientsArr);
+                    foodApp.displayNutritionalInfo2(foodApp.pages);
 
 
                 });
@@ -196,7 +245,7 @@ foodApp.getFoodItems = function (search) {
 
 foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
-    let foodNutrientsHTML = '';
+    let foodNutrientsHTML = '<div class="nutrientList--Block"><ul class="nutrientList">';
 
     arr[arrIndex].forEach((elem) => {
         const shortName = elem.name.replace(/\,\s*GTIN:\s*\d*|\,\s*UPC:\s*\d*/ig, '')
@@ -240,9 +289,67 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
         `;
     });
 
-    // foodNutrientsHTML += `</ul>`;
+    foodNutrientsHTML += `</ul></div>`;
 
-    $('.nutrientList').append(foodNutrientsHTML);
+    $('.mainContent').append(foodNutrientsHTML);
+    $('.nutrientList--Block').show();
+
+}
+
+foodApp.displayNutritionalInfo2 = function(arr) {
+
+    let foodNutrientsHTML = '<div class="gallery">';
+
+    arr.forEach((elem) => {
+        foodNutrientsHTML += `<div><ul class="nutrientList">`;
+        elem.forEach((subElem) => {
+
+            const shortName = subElem.name.replace(/\,\s*GTIN:\s*\d*|\,\s*UPC:\s*\d*/ig, '')
+                .replace(/amp\;/ig, '')
+                .replace(/^([\w\&\\\:\,\'\/\; ]{60})([\w\&\\\,\:\;\'\/ ]*)/ig, (matchedString, first, second) => {
+                    return `${first}...`;
+                });
+    
+            const sugarVal = `${subElem.nutrients[0].value}${subElem.nutrients[0].unit}`;
+            const proteinVal = `${subElem.nutrients[1].value}${subElem.nutrients[1].unit}`;
+    
+            const fatVal = `${subElem.nutrients[2].value}${subElem.nutrients[2].unit}`;
+            const cholesterolVal = `${subElem.nutrients[3].value}${subElem.nutrients[3].unit}`;
+            const carbVal = `${subElem.nutrients[4].value}${subElem.nutrients[4].unit}`;
+            const energyVal = `${subElem.nutrients[5].value}${subElem.nutrients[5].unit}`;
+            const sodiumVal = `${subElem.nutrients[6].value}${subElem.nutrients[6].unit}`;
+            const fibreVal = `${subElem.nutrients[7].value}${subElem.nutrients[7].unit}`;
+    
+            foodNutrientsHTML +=
+                `<li class="nutrientList__Container">
+               <ul class="nutrientList__header">
+                 <li class="nutrientList__FoodName"><p class="nutrientList__FoodName--overlay" title="${subElem.name}"><span>${shortName}</span></p><</li>
+               </ul>
+               <ul class="nutrientLabel">
+                 <li class="nutrientLabel__Title">Nutrition facts</li>
+                 <li class="nutrientLabel__Serving">Serving size</li>
+                 <li class="nutritionLabel__Measurement">${subElem.measure} </li>
+                 <li><hr></li>
+                 <li class="nutrientLabel__Nutrient">Energy <span class="nutrientLabel__Nutrient--measurement">${energyVal}</span></li>
+                 <li class="nutrientLabel__Nutrient">Fat <span class="nutrientLabel__Nutrient--measurement">${fatVal}</span></li>
+                 <li class="nutrientLabel__Nutrient">Cholesterol <span class="nutrientLabel__Nutrient--measurement">${cholesterolVal}</span></li>
+                 <li class="nutrientLabel__Nutrient">Sodium <span class="nutrientLabel__Nutrient--measurement">${sodiumVal}</span></li>
+                 <li class="nutrientLabel__Nutrient">Carbohydrates <span class="nutrientLabel__Nutrient--measurement">${carbVal}</span></li>
+                    <ul>
+                        <li class = "nutrientLabel__Nutrient nutrientLabel__Nutrient--indent"> Fibre  <span class = "nutrientLabel__Nutrient--measurement"> ${fibreVal} </span></li>
+                        <li class = "nutrientLabel__Nutrient nutrientLabel__Nutrient--indent"> Sugar <span class = "nutrientLabel__Nutrient--measurement"> ${sugarVal} </span></li>
+                    </ul>
+                 <li class="nutrientLabel__Nutrient">Protein<span class="nutrientLabel__Nutrient--measurement">${proteinVal}</span></li>
+               </ul>
+               </li>
+            `;
+        });
+        foodNutrientsHTML += `</ul></div>`
+    });
+
+    foodNutrientsHTML += `</div>`;
+
+    $('.mainContent').append(foodNutrientsHTML);
 
 }
 
@@ -365,4 +472,13 @@ foodApp.clearDOM = function () {
 
 $(function () {
     foodApp.init();
+
+    // $('.mainContent').slick({
+    //     accessibility: true,
+    //     arrows: true
+    // });
+
+        // $('.gallery').flickity({
+
+        // });
 })
