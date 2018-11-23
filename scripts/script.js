@@ -59,6 +59,44 @@ foodApp.events = function () {
 
 foodApp.apiKeyUSDA = 'TqiCp1WcVXZzchDeT3DL0M8mk2OrOirzhkXgTrwa';
 
+//Array of arrays, each containing the what should be displayed on the correspoding page on the DOM
+foodApp.pages = [];
+
+//Array to store all results of searches
+foodApp.itemsArray = [];
+
+//Number of items which would be displayed per page
+foodApp.itemsPerPage = 12;
+
+//Variable for storing the number of pages of results
+foodApp.numofPages = 0;
+
+//Variable for keeping track of current page
+foodApp.currentPage = 0;
+
+//Method to determine number of pages of results after search
+foodApp.generatePages = function(objectArr) {
+    //Reset object parameters
+    foodApp.pages = [];
+    foodApp.numofPages = 0;
+    foodApp.currentPage = 0;
+    
+    foodApp.itemsArray = objectArr;
+
+    //Determine the number of results pages
+    foodApp.numofPages = Math.ceil(foodApp.itemsArray.length / foodApp.itemsPerPage);
+
+    let start = 0;
+    let end = foodApp.itemsPerPage;
+   
+    //Loops for putting results on appropriate pages
+    for (let i = 0; i < foodApp.numofPages; i++) {
+        foodApp.pages.push(foodApp.itemsArray.slice(start, end));
+        start = end;
+        end += 12;
+    }
+
+}
 
 
 //Function to query USDA database and display nutrient info for each result
@@ -107,33 +145,30 @@ foodApp.getFoodItems = function (search) {
                         return elem[0].report.foods[0];
                     });
 
+                    foodApp.generatePages(nutrientsArr);
+                    // foodApp.nutrientsArr = nutrientsArr;
+                    // foodApp.numofPages = Math.ceil(foodApp.nutrientsArr.length / 12);
 
-///////////////////MAKE A FUNCTION/////////////////
-                    //Store all Nutrients in an Array 
-                    foodApp.nutrientsArr = nutrientsArr;
-                    //Find out number of pages
-                    foodApp.numofPages = Math.ceil(foodApp.nutrientsArr.length / 12);
-
-                    let start = 0;
-                    let end = 12;
+                    // let start = 0;
+                    // let end = 12;
 
                     
-//Used to store arrays of nutrients objects per page
-foodApp.pages = [];
+                    // foodApp.pages = [];
 
-                    for (let i = 0; i < foodApp.numofPages; i++) {
-                        foodApp.pages.push(foodApp.nutrientsArr.slice(start, end));
-                        start = end;
-                        end += 12;
-                    }
+                    // for (let i = 0; i < foodApp.numofPages; i++) {
+                    //     foodApp.pages.push(foodApp.nutrientsArr.slice(start, end));
+                    //     start = end;
+                    //     end += 12;
+                    // }
 
-                    foodApp.currentPage = 0;
+                    // foodApp.currentPage = 0;
 
 
                     //Display first 12 food nutritional items
                     foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
 
                     //Display next key arrow if length of pages is more than 1 
+
                 });
 
         });
@@ -198,12 +233,14 @@ foodApp.getRecipeItems = function (search) {
     // AJAX API request for Recipe search term
     $.when(recipeItemPromise)
         .then((res) => {
-			// console.log("​foodApp.getRecipeItems -> res", res);
+			
             //convert res to JSON object
             const resObj = JSON.parse(res);
             const recipeItemArray = resObj.recipes;
 
-///////////////////MAKE A FUNCTION/////////////////
+
+
+            foodApp.generatePages(recipeItemArr);
             //Store all recipes in an Array 
             foodApp.recipesArr = recipeItemArray;
             //Find out number of pages
@@ -212,7 +249,6 @@ foodApp.getRecipeItems = function (search) {
             let start = 0;
             let end = 12;
 
-            //Used to store arrays of nutrients objects per page
             foodApp.pages = [];
 
             for (let i = 0; i < foodApp.numofPages; i++) {
