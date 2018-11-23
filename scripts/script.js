@@ -66,7 +66,7 @@ foodApp.pages = [];
 foodApp.itemsArray = [];
 
 //Number of items which would be displayed per page
-foodApp.itemsPerPage = 12;
+foodApp.itemsPerPage = 6;
 
 //Variable for storing the number of pages of results
 foodApp.numofPages = 0;
@@ -93,7 +93,7 @@ foodApp.generatePages = function(objectArr) {
     for (let i = 0; i < foodApp.numofPages; i++) {
         foodApp.pages.push(foodApp.itemsArray.slice(start, end));
         start = end;
-        end += 12;
+        end += foodApp.itemsPerPage;
     }
 
 }
@@ -187,6 +187,7 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
         const sugarVal = `${elem.nutrients[0].value}${elem.nutrients[0].unit}`;
         const proteinVal = `${elem.nutrients[1].value}${elem.nutrients[1].unit}`;
+        
         const fatVal = `${elem.nutrients[2].value}${elem.nutrients[2].unit}`;
         const cholesterolVal = `${elem.nutrients[3].value}${elem.nutrients[3].unit}`;
         const carbVal = `${elem.nutrients[4].value}${elem.nutrients[4].unit}`;
@@ -195,18 +196,25 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
         const fibreVal = `${elem.nutrients[7].value}${elem.nutrients[7].unit}`;
 
         foodNutrientsHTML +=
-            `<li class="nutrientLabel">
+            `<li class="nutrientList__Container">
            <ul>
-             <li>${name}</li>
-             <li>${elem.measure} </li>
-             <li>Sugar ${sugarVal}</li>
-             <li>Protein ${proteinVal}</li>
-             <li>Fat ${fatVal}</li>
-             <li>Cholesterol ${cholesterolVal}</li>
-             <li>Carbohydrates ${carbVal}</li>
-             <li>Energy ${energyVal}</li>
-             <li>Sodium ${sodiumVal}</li>
-             <li>Fibre ${fibreVal}</li>
+             <li class="nutrientList__FoodName"><p class="nutrientList__FoodName--overlay">${name}</p></li>
+           </ul>
+           <ul class="nutrientLabel">
+             <li class="nutrientLabel__Title">Nutrition facts</li>
+             <li class="nutrientLabel__Serving">Serving size</li>
+             <li class="nutritionLabel__Measurement">${elem.measure} </li>
+             <li><hr></li>
+             <li class="nutrientLabel__Nutrient">Energy <span class="nutrientLabel__Nutrient--measurement">${energyVal}</span></li>
+             <li class="nutrientLabel__Nutrient">Fat <span class="nutrientLabel__Nutrient--measurement">${fatVal}</span></li>
+             <li class="nutrientLabel__Nutrient">Cholesterol <span class="nutrientLabel__Nutrient--measurement">${cholesterolVal}</span></li>
+             <li class="nutrientLabel__Nutrient">Sodium <span class="nutrientLabel__Nutrient--measurement">${sodiumVal}</span></li>
+             <li class="nutrientLabel__Nutrient">Carbohydrates <span class="nutrientLabel__Nutrient--measurement">${carbVal}</span></li>
+                <ul>
+                    <li class = "nutrientLabel__Nutrient nutrientLabel__Nutrient--indent"> Fibre  <span class = "nutrientLabel__Nutrient--measurement"> ${fibreVal} </span></li>
+                    <li class = "nutrientLabel__Nutrient nutrientLabel__Nutrient--indent"> Sugar <span class = "nutrientLabel__Nutrient--measurement"> ${sugarVal} </span></li>
+                </ul>
+             <li class="nutrientLabel__Nutrient">Protein<span class="nutrientLabel__Nutrient--measurement">${proteinVal}</span></li>
            </ul>
            </li>
         `;
@@ -251,7 +259,7 @@ foodApp.getRecipeItems = function (search) {
 
             foodApp.pages = [];
 
-            for (let i = 0; i < foodApp.numofPages; i++) {
+            for (let i = 0; i <foodApp.numofPages; i++) {
                 foodApp.pages.push(foodApp.recipesArr.slice(start, end));
                 start = end;
                 end += 12;
