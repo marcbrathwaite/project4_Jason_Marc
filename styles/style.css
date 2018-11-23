@@ -160,66 +160,70 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
   width: 90%;
   margin: 0 auto; }
 
-.mainContent .pageButton {
-  border: none;
-  background-color: transparent;
-  font-size: 6rem;
-  position: absolute;
-  top: 43%; }
-  .mainContent .pageButton--next {
-    right: 25px; }
-  .mainContent .pageButton--prev {
-    left: 25px; }
+.header {
+  height: 100vh;
+  background: olivedrab; }
 
-.mainContent .nutrientList {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  list-style: none;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  justify-content: space-between; }
-  .mainContent .nutrientList__Container {
-    width: calc(33.33% - 40px);
+.mainContent {
+  position: relative; }
+  .mainContent .pageButton {
+    border: none;
+    background-color: transparent;
+    font-size: 6rem;
+    position: absolute;
+    top: 47%; }
+    .mainContent .pageButton--next {
+      right: -45px; }
+    .mainContent .pageButton--prev {
+      left: -45px; }
+  .mainContent .nutrientList {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    list-style: none;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between; }
+    .mainContent .nutrientList__Container {
+      width: calc(33.33% - 40px);
+      padding: 20px; }
+    .mainContent .nutrientList li {
+      list-style: none; }
+    .mainContent .nutrientList__FoodName {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      text-align: center;
+      color: white;
+      line-height: 1.3;
+      background: url(../../assets/food-label-background.jpg);
+      background-size: cover;
+      background-position: center; }
+      .mainContent .nutrientList__FoodName--overlay {
+        background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.4)), to(rgba(0, 0, 0, 0.4)));
+        background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+        background: -o-linear-gradient(top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+        padding: 25px; }
+  .mainContent .nutrientLabel {
+    border: 1px solid black;
     padding: 20px; }
-  .mainContent .nutrientList li {
-    list-style: none; }
-  .mainContent .nutrientList__FoodName {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    text-align: center;
-    color: white;
-    line-height: 1.3;
-    background: url(../../assets/food-label-background.jpg);
-    background-size: cover;
-    background-position: center; }
-    .mainContent .nutrientList__FoodName--overlay {
-      background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.4)), to(rgba(0, 0, 0, 0.4)));
-      background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
-      background: -o-linear-gradient(top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
-      padding: 25px; }
-
-.mainContent .nutrientLabel {
-  border: 1px solid black;
-  padding: 20px; }
-  .mainContent .nutrientLabel__Title {
-    font-size: 2.2rem;
-    text-transform: uppercase;
-    font-weight: bold; }
-  .mainContent .nutrientLabel__Serving {
-    margin: 5px 0; }
-  .mainContent .nutrientLabel hr {
-    margin-right: 10px;
-    border-top: 5px solid #000; }
-  .mainContent .nutrientLabel__Nutrient {
-    letter-spacing: 2px;
-    line-height: 1.6;
-    font-weight: bold; }
-    .mainContent .nutrientLabel__Nutrient--indent {
-      padding-left: 30px;
-      font-weight: normal; }
-    .mainContent .nutrientLabel__Nutrient--measurement {
-      font-weight: normal; }
+    .mainContent .nutrientLabel__Title {
+      font-size: 2.2rem;
+      text-transform: uppercase;
+      font-weight: bold; }
+    .mainContent .nutrientLabel__Serving {
+      margin: 5px 0; }
+    .mainContent .nutrientLabel hr {
+      margin-right: 10px;
+      border-top: 5px solid #000; }
+    .mainContent .nutrientLabel__Nutrient {
+      letter-spacing: 2px;
+      line-height: 1.6;
+      font-weight: bold; }
+      .mainContent .nutrientLabel__Nutrient--indent {
+        padding-left: 30px;
+        font-weight: normal; }
+      .mainContent .nutrientLabel__Nutrient--measurement {
+        font-weight: normal; }

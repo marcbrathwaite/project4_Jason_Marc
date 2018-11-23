@@ -1,15 +1,17 @@
 .mainContent {
+    position: relative;
     .pageButton{
         border: none;
         background-color: rgba(0,0,0,0);
         font-size: 6rem;
         position: absolute;
-        top: 43%;
+        top: 47%;
+        // transform: translateY(-50%);
         &--next {
-            right: 25px;
+            right: -45px;
         }
         &--prev {
-            left: 25px;
+            left: -45px;
         }
 
     }
@@ -37,6 +39,7 @@
             // padding: 25px;
             // border: 1px solid #000
             background: url(../../assets/food-label-background.jpg);
+            // Photo by Carissa Gan on Unsplash: https://unsplash.com/photos/KSXvrqKUxnc
             background-size: cover;
             background-position: center;
             &--overlay {
