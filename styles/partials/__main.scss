@@ -1,4 +1,19 @@
 .mainContent {
+    .pageButton{
+        border: none;
+        background-color: rgba(0,0,0,0);
+        font-size: 6rem;
+        position: absolute;
+        top: 43%;
+        &--next {
+            right: 25px;
+        }
+        &--prev {
+            left: 25px;
+        }
+
+    }
+
     .nutrientList {
         display: flex;
         flex-wrap: wrap;
