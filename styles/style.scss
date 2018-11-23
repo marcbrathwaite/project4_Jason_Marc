@@ -1,9 +1,9 @@
 .mainContent {
-    display: flex;
-    .foodList {
-        width: 20%;
+    .nutrientList {
+        display: flex;
+        flex-wrap: wrap;
     }
-    .foodInfo {
-        width: 70%;
+    .nutrientLabel {
+        width: 33.33%;
     }
 }
