@@ -5,7 +5,7 @@
         background-color: rgba(0,0,0,0);
         font-size: 6rem;
         position: absolute;
-        top: 47%;
+        top: 48%;
         display:none;
         // transform: translateY(-50%);
         &--next {
@@ -83,12 +83,16 @@
             letter-spacing: 2px;
             line-height: 1.6;
             font-weight: bold;
+            display: flex;
+            justify-content: space-between;
             &--indent {
                 padding-left: 30px;
                 font-weight: normal;
             }
             &--measurement {
                 font-weight: normal;
+                display: inline-block;
+                padding-right: 10px;
             }
         }
     }
