@@ -13,21 +13,48 @@ foodApp.events = function () {
         // Clears display
         foodApp.clearDOM();
         //Retrive value of Search Type radio button
-        const searchType = $('input[name="searchType"]').val();
+        const searchType = $('input[type="radio"]:checked').val();
+        console.log("​foodApp.events -> searchType", searchType);
 
-        // Retrieves nutrition value from search box
+        // Retrieves seachTerm value from search box
         const searchTerm = $('#searchField').val();
+
+        if (searchType === 'nutrition') {
+            //Create promise for food item search
+            foodApp.getFoodItems(searchTerm);
+        } else {
+            //Create promise for Recipe search
+            foodApp.getRecipeItems(searchTerm);
+
+        }
         // Clear search field
         $('#searchField').val('');
-        //Create promise for food item search
-        foodApp.getFoodItems(searchTerm);
-        // console.log("​foodApp.events -> ndbnoArr", ndbnoArr);
-        // Create an array of  promises for nutrient search
-        // const promiseArr = foodApp.getFoodNutrients(ndbnoArr);
-        // Make API request and retrieve food items
-        // foodApp.makeAPIRequest(promiseArr, foodApp.displayNutritionalInfo);
 
     });
+
+    //Click next arrow
+    $('').on('click', function () {
+        //Clear the dom
+        //Increment page counter
+
+        //Display content on page
+
+        //Display prev arrow if page counter == 1
+
+        //Hide next arrow if page counter === pages.length
+
+    })
+
+    //Click prev arrow
+    $('').on('click', function () {
+        //Clear the dom
+        //Decrease page counter
+
+        //Display content on page
+        //Display next arrow if page counter === pages.length - 1
+        //Hide prev arrow if page counter === 0
+
+    })
 }
 
 foodApp.apiKeyUSDA = 'TqiCp1WcVXZzchDeT3DL0M8mk2OrOirzhkXgTrwa';
@@ -49,10 +76,9 @@ foodApp.getFoodItems = function (search) {
         }
     });
 
-    //AJAX API requiest for search term AND GET ndbno numbers
+    //AJAX API request for Foot Item search term to get ndbno numbers
     $.when(foodItemPromise)
         .then((res) => {
-            
             const foodItemArray = res.list.item;
             //Generate an array of ndbno numbers
             const ndbnoArr = foodItemArray.map((elem) => {
@@ -60,69 +86,69 @@ foodApp.getFoodItems = function (search) {
             });
 
             //Generate an array of promises with ndbno search
-        const nutrientPromises = ndbnoArr.map((elem) => {
-            return $.ajax({
-                url: 'https://api.nal.usda.gov/ndb/nutrients',
-                dataType: 'json',
-                method: 'GET',
-                data: {
-                    api_key: foodApp.apiKeyUSDA,
-                    format: 'json',
-                    lt: 'n',
-                    ndbno: elem,
-                    nutrients: ['208', '204', '601', '307', '205', '291', '269', '203']
-                }
-            });
-        });
-
-        $.when(...nutrientPromises)
-        .then((...res) => {
-            const nutrientsArr = res.map((elem) => {
-                return elem[0].report.foods[0];
+            const nutrientPromises = ndbnoArr.map((elem) => {
+                return $.ajax({
+                    url: 'https://api.nal.usda.gov/ndb/nutrients',
+                    dataType: 'json',
+                    method: 'GET',
+                    data: {
+                        api_key: foodApp.apiKeyUSDA,
+                        format: 'json',
+                        lt: 'n',
+                        ndbno: elem,
+                        nutrients: ['208', '204', '601', '307', '205', '291', '269', '203']
+                    }
+                });
             });
 
-
-            //Store all Nutrients in an Array 
-            foodApp.nutrientsArr = nutrientsArr;
-            //Find out number of pages
-            foodApp.numofPages = Math.ceil(foodApp.nutrientsArr.length / 12);
-
-            let start = 0;
-            let end = 12;
-
-            //Used to arrays of nutrients objects per page
-            foodApp.pages = [];
+            $.when(...nutrientPromises)
+                .then((...res) => {
+                    const nutrientsArr = res.map((elem) => {
+                        return elem[0].report.foods[0];
+                    });
 
 
-            for (let i=0; i < foodApp.numofPages; i++) {
-                foodApp.pages.push(foodApp.nutrientsArr.slice(start, end));
-                start = end;
-                end += 12;
-            }
+///////////////////MAKE A FUNCTION/////////////////
+                    //Store all Nutrients in an Array 
+                    foodApp.nutrientsArr = nutrientsArr;
+                    //Find out number of pages
+                    foodApp.numofPages = Math.ceil(foodApp.nutrientsArr.length / 12);
 
-            foodApp.currentPage = 0;
+                    let start = 0;
+                    let end = 12;
+
+                    
+//Used to store arrays of nutrients objects per page
+foodApp.pages = [];
+
+                    for (let i = 0; i < foodApp.numofPages; i++) {
+                        foodApp.pages.push(foodApp.nutrientsArr.slice(start, end));
+                        start = end;
+                        end += 12;
+                    }
+
+                    foodApp.currentPage = 0;
 
 
-            //Display first 12 food nutritional items
-            foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
+                    //Display first 12 food nutritional items
+                    foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
 
-            
+                    //Display next key arrow if length of pages is more than 1 
+                });
+
         });
-        
-    });
 };
-
 
 foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
     let foodNutrientsHTML = `<ul class="nutrientList">`;
-    
+
     arr[arrIndex].forEach((elem) => {
-        const name = elem.name.replace(/GTIN:\s*\d*|UPC:\s*\d*/ig,'')
-        .replace(/amp\;/ig,'')
-        .replace(/^([a-zA-Z0-9\&\\\:\,\'\/\; ]{60})([a-zA-Z0-9\&\\\,\:\;\'\/ ]*)/ig, (matchedString, first, second) => {
-            return `${first}...`;
-        });
+        const name = elem.name.replace(/GTIN:\s*\d*|UPC:\s*\d*/ig, '')
+            .replace(/amp\;/ig, '')
+            .replace(/^([a-zA-Z0-9\&\\\:\,\'\/\; ]{60})([a-zA-Z0-9\&\\\,\:\;\'\/ ]*)/ig, (matchedString, first, second) => {
+                return `${first}...`;
+            });
 
         const sugarVal = `${elem.nutrients[0].value}${elem.nutrients[0].unit}`;
         const proteinVal = `${elem.nutrients[1].value}${elem.nutrients[1].unit}`;
@@ -133,8 +159,8 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
         const sodiumVal = `${elem.nutrients[6].value}${elem.nutrients[6].unit}`;
         const fibreVal = `${elem.nutrients[7].value}${elem.nutrients[7].unit}`;
 
-        foodNutrientsHTML += 
-        `<li class="nutrientLabel">
+        foodNutrientsHTML +=
+            `<li class="nutrientLabel">
            <ul>
              <li>${name}</li>
              <li>${elem.measure} </li>
@@ -157,6 +183,57 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
 }
 
+foodApp.apiKeyFood = '36e1c3158aa2b6e632e8819d171aa9d4';
+
+foodApp.getRecipeItems = function (search) {
+
+    const recipeItemPromise = $.ajax({
+        url: 'https://www.food2fork.com/api/search',
+        data: {
+            key: foodApp.apiKeyFood,
+            q: search
+        }
+    });
+
+    // AJAX API request for Recipe search term
+    $.when(recipeItemPromise)
+        .then((res) => {
+			// console.log("​foodApp.getRecipeItems -> res", res);
+            //convert res to JSON object
+            const resObj = JSON.parse(res);
+            const recipeItemArray = resObj.recipes;
+
+///////////////////MAKE A FUNCTION/////////////////
+            //Store all recipes in an Array 
+            foodApp.recipesArr = recipeItemArray;
+            //Find out number of pages
+            foodApp.numofPages = Math.ceil(foodApp.recipesArr.length / 12);
+
+            let start = 0;
+            let end = 12;
+
+            //Used to store arrays of nutrients objects per page
+            foodApp.pages = [];
+
+            for (let i = 0; i < foodApp.numofPages; i++) {
+                foodApp.pages.push(foodApp.recipesArr.slice(start, end));
+                start = end;
+                end += 12;
+            }
+
+            foodApp.currentPage = 0;
+            
+        }).fail((err) => {
+            console.log(err);
+        });
+
+}
+
+foodApp.displayRecipes = function (arr, arrIndex) {
+
+}
+
+
 // Recieves promise and display callback function, and displays appropriate info
 
 foodApp.makeAPIRequest = function (promise, fn) {
@@ -171,7 +248,7 @@ foodApp.makeAPIRequest = function (promise, fn) {
 
 // Erase any current html in aside list and main section
 foodApp.clearDOM = function () {
-    $('#resultsList').empty();
+    $('.mainContent').empty();
 }
 
 // Create preloader while user waits for results
