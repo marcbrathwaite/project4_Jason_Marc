@@ -32,8 +32,9 @@ foodApp.events = function () {
 
 foodApp.apiKeyUSDA = 'TqiCp1WcVXZzchDeT3DL0M8mk2OrOirzhkXgTrwa';
 
-// Make Ajax API query of the search term and get all of the NDBNO values for the results
 
+
+//Function to query USDA database and display nutrient info for each result
 foodApp.getFoodItems = function (search) {
     const foodItemPromise = $.ajax({
         url: 'http://api.nal.usda.gov/ndb/',
@@ -42,19 +43,23 @@ foodApp.getFoodItems = function (search) {
         data: {
             api_key: foodApp.apiKeyUSDA,
             format: 'json',
-            q: search, // Get from search query
+            q: search,
             max: 50,
             nutrients: 'y'
         }
     });
 
+    //AJAX API requiest for search term AND GET ndbno numbers
     $.when(foodItemPromise)
         .then((res) => {
+            
             const foodItemArray = res.list.item;
+            //Generate an array of ndbno numbers
             const ndbnoArr = foodItemArray.map((elem) => {
                 return elem['ndbno'];
             });
 
+            //Generate an array of promises with ndbno search
         const nutrientPromises = ndbnoArr.map((elem) => {
             return $.ajax({
                 url: 'https://api.nal.usda.gov/ndb/nutrients',
@@ -85,7 +90,9 @@ foodApp.getFoodItems = function (search) {
             let start = 0;
             let end = 12;
 
+            //Used to arrays of nutrients objects per page
             foodApp.pages = [];
+
 
             for (let i=0; i < foodApp.numofPages; i++) {
                 foodApp.pages.push(foodApp.nutrientsArr.slice(start, end));
@@ -93,18 +100,62 @@ foodApp.getFoodItems = function (search) {
                 end += 12;
             }
 
+            foodApp.currentPage = 0;
 
-            //Display nutrional info for 12 items
 
-
+            //Display first 12 food nutritional items
+            foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
 
             
         });
-
+        
     });
 };
 
 
+foodApp.displayNutritionalInfo = function (arr, arrIndex) {
+
+    let foodNutrientsHTML = `<ul class="nutrientList">`;
+    
+    arr[arrIndex].forEach((elem) => {
+        const name = elem.name.replace(/GTIN:\s*\d*|UPC:\s*\d*/ig,'')
+        .replace(/amp\;/ig,'')
+        .replace(/^([a-zA-Z0-9\&\\\:\,\'\/\; ]{60})([a-zA-Z0-9\&\\\,\:\;\'\/ ]*)/ig, (matchedString, first, second) => {
+            return `${first}...`;
+        });
+
+        const sugarVal = `${elem.nutrients[0].value}${elem.nutrients[0].unit}`;
+        const proteinVal = `${elem.nutrients[1].value}${elem.nutrients[1].unit}`;
+        const fatVal = `${elem.nutrients[2].value}${elem.nutrients[2].unit}`;
+        const cholesterolVal = `${elem.nutrients[3].value}${elem.nutrients[3].unit}`;
+        const carbVal = `${elem.nutrients[4].value}${elem.nutrients[4].unit}`;
+        const energyVal = `${elem.nutrients[5].value}${elem.nutrients[5].unit}`;
+        const sodiumVal = `${elem.nutrients[6].value}${elem.nutrients[6].unit}`;
+        const fibreVal = `${elem.nutrients[7].value}${elem.nutrients[7].unit}`;
+
+        foodNutrientsHTML += 
+        `<li class="nutrientLabel">
+           <ul>
+             <li>${name}</li>
+             <li>${elem.measure} </li>
+             <li>Sugar ${sugarVal}</li>
+             <li>Protein ${proteinVal}</li>
+             <li>Fat ${fatVal}</li>
+             <li>Cholesterol ${cholesterolVal}</li>
+             <li>Carbohydrates ${carbVal}</li>
+             <li>Energy ${energyVal}</li>
+             <li>Sodium ${sodiumVal}</li>
+             <li>Fibre ${fibreVal}</li>
+           </ul>
+           </li>
+        `;
+    });
+
+    foodNutrientsHTML += `</ul>`;
+
+    $('.mainContent').append(foodNutrientsHTML);
+
+}
 
 // Recieves promise and display callback function, and displays appropriate info
 
@@ -115,19 +166,6 @@ foodApp.makeAPIRequest = function (promise, fn) {
 };
 
 
-foodApp.displayNutritionalInfo = function (arr) {
-
-
-
-    // let foodNutrientsHTML = `<ul class="nutrientList">`;
-    // Itterates through nutrients and creates HTML for food info section
-    // res.forEach((elm) => {
-
-    // });
-    // Displays the results
-    // $('#nutrientListNames').append(foodNutrientsHTML);
-
-}
 
 // User enters search query and selects nutritional info
 
