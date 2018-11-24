@@ -9,6 +9,7 @@ foodApp.init = function () {
     //Array to store all results of searches
     foodApp.itemsArray = [];
 
+
     //Number of items which would be displayed per page
     foodApp.itemsPerPage = 6;
 
@@ -18,8 +19,11 @@ foodApp.init = function () {
     //Variable for keeping track of current page
     foodApp.currentPage = 0;
 
+
     foodApp.events();
 }
+
+
 
 //Function to move the scrollbar to the top of the mainContent section
 foodApp.scrollMain = function (duration) {
@@ -28,12 +32,15 @@ foodApp.scrollMain = function (duration) {
     }, duration);
 }
 
+
+
 foodApp.events = function () {
     // Get search term and value of search type=nutritional. Save value in variable
     $('#submitBtn').on('click', function (event) {
         event.preventDefault();
         // Clears display
         foodApp.clearDOM();
+        $('.mainContent').hide();
         $('.pageButton--prev').hide();
         $('.pageButton--next').hide();
 
@@ -52,11 +59,29 @@ foodApp.events = function () {
 
         // }
         //Move top of scrollbar to top of main content section
-        foodApp.scrollMain(1500);
-
+        // foodApp.scrollMain(1500);
+        
         // Clear search field
         $('#searchField').val('');
 
+        // Listen for scroll and show page buttons upon certain scroll height
+        $(window).on('scroll', function () {
+            let y = $(window).scrollTop();
+            let mainTop = $('.mainContent').offset().top;
+            if (y > mainTop - 100) {
+                if (foodApp.currentPage === foodApp.pages.length - 1 || foodApp.numofPages < 1) {
+                    $('.pageButton--next').hide(400);
+                } else {
+                    $('.pageButton--next').show(400);
+                }
+                if (foodApp.currentPage > 0) {
+                    $('.pageButton--prev').show(400);
+                }
+            } else {
+                $('.pageButton').hide(400);
+            }
+            // console.log(foodApp.itemsArray);
+        });        
     });
 
     //Click next arrow
@@ -65,13 +90,19 @@ foodApp.events = function () {
         foodApp.clearDOM();
         //Increment current page
         foodApp.currentPage++;
+
+        // Temporarily hide next button on click
+        foodApp.buttonDelay();
+
         //Display content on page
         foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage);
 
-        foodApp.scrollMain(1000);
+        // foodApp.scrollMain(1000);
 
         //Display prev arrow if page counter == 1
-        $('.pageButton--prev').show('1000');
+        if (foodApp.currentPage === 1) {
+            $('.pageButton--prev').show();
+        }
 
         //Hide next arrow if current page === pages.length
         if (foodApp.currentPage === foodApp.pages.length - 1) {
@@ -90,10 +121,11 @@ foodApp.events = function () {
         //Display content on page
         foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage);
 
-        foodApp.scrollMain(1000);
+        // Temporarily hide next button on click
+        foodApp.buttonDelay();
 
         //Display next arrow if page counter === pages.length - 1
-        $('.pageButton--next').show('1000');
+        // $('.pageButton--next').show('1000');
 
         //Hide prev arrow if page counter === 0
         if (foodApp.currentPage === 0) {
@@ -105,6 +137,25 @@ foodApp.events = function () {
 
 foodApp.apiKeyUSDA = 'TqiCp1WcVXZzchDeT3DL0M8mk2OrOirzhkXgTrwa';
 
+foodApp.buttonDelay = function (){
+    // Temporarily hide next button on click
+    $('.pageButton').hide();
+
+    if (foodApp.currentPage === foodApp.pages.length - 1){
+        setTimeout(() => {
+            $('.pageButton--prev').show();
+        }, 500);
+    } else if (foodApp.currentPage === 0) {
+        setTimeout(() => {
+            $('.pageButton--next').show();
+        }, 500);
+    } else {
+        setTimeout(() => {
+            $('.pageButton').show();
+        }, 500); 
+    }
+};
+
 
 
 //Method to determine number of pages of results after search
@@ -113,8 +164,10 @@ foodApp.generatePages = function (objectArr) {
     foodApp.pages = [];
     foodApp.numofPages = 0;
     foodApp.currentPage = 0;
-
-    foodApp.itemsArray = objectArr;
+    
+    foodApp.itemsArray = objectArr.filter((elem) => {
+        return elem.nutrients.length > 0;
+    });
 
     //Determine the number of results pages
     foodApp.numofPages = Math.ceil(foodApp.itemsArray.length / foodApp.itemsPerPage);
@@ -180,11 +233,6 @@ foodApp.getFoodItems = function (search) {
 
                     foodApp.generatePages(nutrientsArr);
                     foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
-
-                    //Display next key arrow if length of pages is more than 1 
-                    if (foodApp.numofPages > 0) {
-                        $('.pageButton--next').show('1500');
-                    }
                 });
         });
 };
@@ -195,9 +243,9 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
     let foodNutrientsHTML = '<div class="nutrientListBlock"><ul class="nutrientList">';
 
     arr[arrIndex].forEach((elem) => {
-        const shortName = elem.name.replace(/\,\s*GTIN:\s*\d*|\,\s*UPC:\s*\d*/ig, '')
+        const shortName = elem.name
             .replace(/amp\;/ig, '')
-            .replace(/^([\w\&\\\:\,\'\/\;\. ]{40})([\w\&\\\,\:\;\'\/\;\. ]*)/ig, (matchedString, first, second) => {
+            .replace(/^([\w\&\\\:\,\'\/\;\.\-\+\=\% ]{40})([\w\&\\\,\:\;\'\/\;\.\-\+\=\% ]*)/ig, (matchedString, first, second) => {
                 return `${first}...`;
             });
 
@@ -240,6 +288,8 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
     $('.mainContent').append(foodNutrientsHTML);
     $('.nutrientListBlock').show();
+    $('.mainContent').show();
+    foodApp.scrollMain(500);
 
 }
 
