@@ -26,7 +26,7 @@ foodApp.init = function () {
 
 
 //Function to move the scrollbar to the top of the mainContent section
-foodApp.scrollMain = function(duration) {
+foodApp.scrollMain = function (duration) {
     $('html, body').animate({
         scrollTop: $('.mainContent').offset().top
     }, duration);
@@ -51,11 +51,11 @@ foodApp.events = function () {
         const searchTerm = $('#searchField').val();
 
         // if (searchType === 'nutrition') {
-            //Create promise for food item search
-            foodApp.getFoodItems(searchTerm);
+        //Create promise for food item search
+        foodApp.getFoodItems(searchTerm);
         // } else {
-            //Create promise for Recipe search
-            // foodApp.getRecipeItems(searchTerm);
+        //Create promise for Recipe search
+        // foodApp.getRecipeItems(searchTerm);
 
         // }
         //Move top of scrollbar to top of main content section
@@ -159,7 +159,7 @@ foodApp.buttonDelay = function (){
 
 
 //Method to determine number of pages of results after search
-foodApp.generatePages = function(objectArr) {
+foodApp.generatePages = function (objectArr) {
     //Reset object parameters
     foodApp.pages = [];
     foodApp.numofPages = 0;
@@ -174,7 +174,7 @@ foodApp.generatePages = function(objectArr) {
 
     let start = 0;
     let end = foodApp.itemsPerPage;
-   
+
     //Loops for putting results on appropriate pages
     for (let i = 0; i < foodApp.numofPages; i++) {
         foodApp.pages.push(foodApp.itemsArray.slice(start, end));
@@ -251,7 +251,7 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
         const sugarVal = `${elem.nutrients[0].value}${elem.nutrients[0].unit}`;
         const proteinVal = `${elem.nutrients[1].value}${elem.nutrients[1].unit}`;
-        
+
         const fatVal = `${elem.nutrients[2].value}${elem.nutrients[2].unit}`;
         const cholesterolVal = `${elem.nutrients[3].value}${elem.nutrients[3].unit}`;
         const carbVal = `${elem.nutrients[4].value}${elem.nutrients[4].unit}`;
