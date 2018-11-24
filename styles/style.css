@@ -236,7 +236,7 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
         -webkit-box-pack: center;
         -ms-flex-pack: center;
         justify-content: center; }
-    .mainContent .nutrientList--Block {
+    .mainContent .nutrientListBlock {
       display: none; }
   .mainContent .nutrientLabel {
     border: 1px solid black;
