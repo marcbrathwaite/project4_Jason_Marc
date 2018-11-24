@@ -249,7 +249,8 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
     border: 1px solid black;
     border-top: none;
     padding: 20px;
-    padding-top: 40px; }
+    padding-top: 40px;
+    height: 370px; }
     .mainContent .nutrientLabel__Title {
       font-size: 2.2rem;
       text-transform: uppercase;
