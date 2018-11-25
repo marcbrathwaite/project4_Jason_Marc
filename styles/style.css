@@ -173,7 +173,7 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
   display: none; }
   .mainContent .pageButton {
     border: none;
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0);
     font-size: 6rem;
     position: fixed;
     top: 50vh;

@@ -19,11 +19,9 @@ foodApp.init = function () {
     //Variable for keeping track of current page
     foodApp.currentPage = 0;
 
-
+    //Initialize even listeners
     foodApp.events();
 }
-
-
 
 //Function to move the scrollbar to the top of the mainContent section
 foodApp.scrollMain = function (duration) {
@@ -32,56 +30,40 @@ foodApp.scrollMain = function (duration) {
     }, duration);
 }
 
-
-
 foodApp.events = function () {
+
+    //Listen for scroll and show page buttons upon certain scroll height
+    $(window).on('scroll', function () {
+        let y = $(window).scrollTop();
+        let mainTop = $('.mainContent').offset().top;
+        if (y > mainTop - 100) {
+            if (foodApp.currentPage === foodApp.pages.length - 1 || foodApp.numofPages < 1) {
+                $('.pageButton--next').hide(400);
+            } else {
+                $('.pageButton--next').show(400);
+            }
+            if (foodApp.currentPage > 0) {
+                $('.pageButton--prev').show(400);
+            }
+        } else {
+            $('.pageButton').hide(400);
+        }
+    });
+
     // Get search term and value of search type=nutritional. Save value in variable
     $('#submitBtn').on('click', function (event) {
         event.preventDefault();
-        // Clears display
-        foodApp.clearDOM();
-        $('.mainContent').hide();
-        $('.pageButton--prev').hide();
-        $('.pageButton--next').hide();
-
-        //Retrive value of Search Type radio button
-        const searchType = $('input[type="radio"]:checked').val();
+        $('.errorText').remove();
 
         // Retrieves seachTerm value from search box
         const searchTerm = $('#searchField').val();
 
-        // if (searchType === 'nutrition') {
         //Create promise for food item search
         foodApp.getFoodItems(searchTerm);
-        // } else {
-        //Create promise for Recipe search
-        // foodApp.getRecipeItems(searchTerm);
 
-        // }
-        //Move top of scrollbar to top of main content section
-        // foodApp.scrollMain(1500);
-        
         // Clear search field
         $('#searchField').val('');
 
-        // Listen for scroll and show page buttons upon certain scroll height
-        $(window).on('scroll', function () {
-            let y = $(window).scrollTop();
-            let mainTop = $('.mainContent').offset().top;
-            if (y > mainTop - 100) {
-                if (foodApp.currentPage === foodApp.pages.length - 1 || foodApp.numofPages < 1) {
-                    $('.pageButton--next').hide(400);
-                } else {
-                    $('.pageButton--next').show(400);
-                }
-                if (foodApp.currentPage > 0) {
-                    $('.pageButton--prev').show(400);
-                }
-            } else {
-                $('.pageButton').hide(400);
-            }
-            // console.log(foodApp.itemsArray);
-        });        
     });
 
     //Click next arrow
@@ -91,13 +73,12 @@ foodApp.events = function () {
         //Increment current page
         foodApp.currentPage++;
 
-        // Temporarily hide next button on click
+        //Temporarily hide next button on click
         foodApp.buttonDelay();
 
         //Display content on page
         foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage);
 
-        // foodApp.scrollMain(1000);
 
         //Display prev arrow if page counter == 1
         if (foodApp.currentPage === 1) {
@@ -124,9 +105,6 @@ foodApp.events = function () {
         // Temporarily hide next button on click
         foodApp.buttonDelay();
 
-        //Display next arrow if page counter === pages.length - 1
-        // $('.pageButton--next').show('1000');
-
         //Hide prev arrow if page counter === 0
         if (foodApp.currentPage === 0) {
             $('.pageButton--prev').hide();
@@ -137,11 +115,11 @@ foodApp.events = function () {
 
 foodApp.apiKeyUSDA = 'TqiCp1WcVXZzchDeT3DL0M8mk2OrOirzhkXgTrwa';
 
-foodApp.buttonDelay = function (){
+foodApp.buttonDelay = function () {
     // Temporarily hide next button on click
     $('.pageButton').hide();
 
-    if (foodApp.currentPage === foodApp.pages.length - 1){
+    if (foodApp.currentPage === foodApp.pages.length - 1) {
         setTimeout(() => {
             $('.pageButton--prev').show();
         }, 500);
@@ -152,10 +130,9 @@ foodApp.buttonDelay = function (){
     } else {
         setTimeout(() => {
             $('.pageButton').show();
-        }, 500); 
+        }, 500);
     }
 };
-
 
 
 //Method to determine number of pages of results after search
@@ -164,7 +141,7 @@ foodApp.generatePages = function (objectArr) {
     foodApp.pages = [];
     foodApp.numofPages = 0;
     foodApp.currentPage = 0;
-    
+
     foodApp.itemsArray = objectArr.filter((elem) => {
         return elem.nutrients.length > 0;
     });
@@ -184,60 +161,88 @@ foodApp.generatePages = function (objectArr) {
 
 }
 
-
 //Function to query USDA database and display nutrient info for each result
 foodApp.getFoodItems = function (search) {
-    const foodItemPromise = $.ajax({
-        url: 'http://api.nal.usda.gov/ndb/',
-        datatype: 'json',
-        method: 'GET',
-        data: {
-            api_key: foodApp.apiKeyUSDA,
-            format: 'json',
-            q: search,
-            max: 60,
-            nutrients: 'y'
-        }
-    });
-
-    //AJAX API request for Foot Item search term to get ndbno numbers
-    $.when(foodItemPromise)
-        .then((res) => {
-            const foodItemArray = res.list.item;
-            //Generate an array of ndbno numbers
-            const ndbnoArr = foodItemArray.map((elem) => {
-                return elem['ndbno'];
-            });
-
-            //Generate an array of promises with ndbno search
-            const nutrientPromises = ndbnoArr.map((elem) => {
-                return $.ajax({
-                    url: 'https://api.nal.usda.gov/ndb/nutrients',
-                    dataType: 'json',
-                    method: 'GET',
-                    data: {
-                        api_key: foodApp.apiKeyUSDA,
-                        format: 'json',
-                        lt: 'n',
-                        ndbno: elem,
-                        nutrients: ['208', '204', '601', '307', '205', '291', '269', '203']
-                    }
-                });
-            });
-
-            $.when(...nutrientPromises)
-                .then((...res) => {
-                    const nutrientsArr = res.map((elem) => {
-                        return elem[0].report.foods[0];
-                    });
-
-                    foodApp.generatePages(nutrientsArr);
-                    foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
-                });
+    //If search is not empty or doesnt contain only spaces
+    if (search.length !== 0 && !/^ +$/.test(search)) {
+        //Clear DOM of all content
+         foodApp.clearDOM();
+         $('.mainContent').hide();
+         $('.pageButton--prev').hide();
+         $('.pageButton--next').hide();
+        const foodItemPromise = $.ajax({
+            url: 'http://api.nal.usda.gov/ndb/',
+            datatype: 'json',
+            method: 'GET',
+            data: {
+                api_key: foodApp.apiKeyUSDA,
+                format: 'json',
+                q: search,
+                max: 60,
+                nutrients: 'y'
+            }
         });
+    
+        //AJAX API request for Foot Item search term to get ndbno numbers
+        $.when(foodItemPromise)
+            .then((res) => {
+                if (res.list) {
+                    const foodItemArray = res.list.item;
+                    
+                    //Generate an array of ndbno numbers
+                    const ndbnoArr = foodItemArray.map((elem) => {
+                        return elem['ndbno'];
+                    });
+        
+                    //Generate an array of promises with ndbno search
+                    const nutrientPromises = ndbnoArr.map((elem) => {
+                        return $.ajax({
+                            url: 'https://api.nal.usda.gov/ndb/nutrients',
+                            dataType: 'json',
+                            method: 'GET',
+                            data: {
+                                api_key: foodApp.apiKeyUSDA,
+                                format: 'json',
+                                lt: 'n',
+                                ndbno: elem,
+                                nutrients: ['208', '204', '601', '307', '205', '291', '269', '203']
+                            }
+                        });
+                    });
+        
+                    $.when(...nutrientPromises)
+                        .then((...res) => {
+                            
+                            let nutrientsArr =[];
+                            //Handles the scenario for multiple results
+                            if(typeof res[0][0] !== 'undefined') {
+                                nutrientsArr = res.map((elem) => {
+                                    return elem[0].report.foods[0];
+                                });
+                            } else { //Handles the scenario when only one result is returned
+                                   nutrientsArr.push(res[0].report.foods[0]);
+                            }
+    
+                            foodApp.generatePages(nutrientsArr);
+                            foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
+                        });
+                } else {
+                    
+                    foodApp.displaySearchError();
+                }
+            });
+    }
 };
 
+//Function to display message letting user that no results were returned for the input
+foodApp.displaySearchError = function() {
+    const searchErrorHTML = `<h2 class="errorText">No results were found for that search term. Please change your search term and try again</h2>`;
 
+    $('.mainContent').append(searchErrorHTML);
+    $('.mainContent').show();
+    foodApp.scrollMain(500);
+    
+}
 foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
     let foodNutrientsHTML = '<div class="nutrientListBlock"><ul class="nutrientList">';
@@ -262,7 +267,7 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
         foodNutrientsHTML +=
             `<li class="nutrientList__Container">
            <ul class="nutrientList__header">
-             <li class="nutrientList__FoodName"><p class="nutrientList__FoodName--overlay" title="${elem.name}"><span>${shortName}</span></p><</li>
+             <li class="nutrientList__FoodName"><p class="nutrientList__FoodName--overlay" title="${elem.name}"><span>${shortName}</span></p></li>
            </ul>
            <ul class="nutrientLabel">
              <li class="nutrientLabel__Title">Nutrition facts</li>
@@ -293,60 +298,10 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
 }
 
-
-// User enters search query and selects nutritional info
-
 // Erase any current html in aside list and main section
 foodApp.clearDOM = function () {
     $('.nutrientList').empty();
 }
-
-// Create preloader while user waits for results
-
-// Take results and add to DOM (append to <ul>). Unique ndbno added as ID for each <li>
-
-// User recieves list of results related to search query
-
-// User chooses from list
-
-// Check value of selection variable 
-
-// Create ajax for USDA nutrient API and pass value of ID:clicked into ndbno
-
-// ????? picture
-
-// Take results from nutrients and add to DOM
-
-// User recieves picture from Unsplash(?) and nutritional info 
-
-
-
-
-
-
-// User enters search query and selects recipes
-
-// Erase any current html in aside list and main section
-
-// Get search term and value of search type=recipes. Save value in variable
-
-// Create ajax for Food2Fork API and pass search into q in API
-
-// Create preloader while user waits for results
-
-// Take results (name and img) and add to DOM (append to <ul>). Unique recipeID added as ID for each <li>
-
-// User recieves recipes containing search term
-
-// User chooses from list
-
-// Check value of selection variable 
-
-// Takes ID and uses it as query for API
-
-// Recieves img, ingredients, possible instructions, and adds to DOM
-
-// Recieves picture from not Unsplash, ingredient list, possible cooking instructions
 
 
 $(function () {
