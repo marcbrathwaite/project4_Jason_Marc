@@ -5,23 +5,29 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700,700i|Source+Sans+Pro" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css"/>
 </head>
 
 <body>
     <header class="header">
-        <form action="" id="searchForm">
-            <!-- <label for="nutrition">Nutrional Information</label>
-            <input type="radio" id="nutrition" value="nutrition" name="searchType" checked>
+        <div class="header--overlay">
+            <div class="wrapper">
+                <h1 class="header__title">Lorem ipsum dolor sit</h1>
+                <form action="" id="searchForm" class="header__searchForm">
+                    <!-- <label for="nutrition">Nutrional Information</label>
+                    <input type="radio" id="nutrition" value="nutrition" name="searchType" checked>
+                    
+                    <label for="recipe">Recipes</label>
+                    <input type="radio" id="recipe" value="recipe" name="searchType"> -->
             
-            <label for="recipe">Recipes</label>
-            <input type="radio" id="recipe" value="recipe" name="searchType"> -->
 
-            <input type="search" name="q" id="searchField">
-            <input type="submit" id="submitBtn">
-        </form>
+                    <input type="search" name="q" id="searchField" class="header__searchField" placeholder="Enter your food item...">
+                    <input type="submit" id="submitBtn" class="header__submitBtn" value="Submit">
+                </form>
+            </div>
+        </div>
     </header>
     <main>
         <div class="wrapper">
@@ -64,7 +70,7 @@
         </div>
     </main>
     <footer class="footer">
-        <p class="footer__text">&copy; Code-Trotters - Jason Mortfield &amp; Marc Brathwaite 2018</p>
+        <p class="footer__text">&copy; Code-Trotters - <a href=""> Jason Mortfield </a> &amp; <a href=""> Marc Brathwaite </a> 2018</p>
     </footer>
 
     <script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4='
