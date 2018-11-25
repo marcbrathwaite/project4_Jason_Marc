@@ -16,3 +16,26 @@ a, li, input {
     width: 90%;
     margin: 0 auto;
 }
+
+$primaryColour: #96e6b3;
+$secondaryColour: #a3e7fc;
+$accentColour: #2f0601;
+
+@mixin primaryFont($size) {
+        font-size: $size;
+        color: $primaryColour;
+        text-shadow: 2px 2px 3px black;
+        margin-bottom: 20px;
+        text-transform: capitalize;
+}
+
+@media (max-width: 1040px) {
+    .header {
+        &__title {
+            @include primaryFont(9rem);
+        }
+        &__subTitle {
+            @include primaryFont(3.5rem);
+        }
+    }
+}
