@@ -17,6 +17,7 @@
             <div class="wrapper">
                 <h1 class="header__title">Lorem ipsum dolor sit</h1>
                 <form action="" id="searchForm" class="header__searchForm">
+                    <label class="visuallyhidden" for="searchField">Enter your food item</label>
                     <input type="search" name="q" id="searchField" class="header__searchField" placeholder="Enter your food item...">
                     <input type="submit" id="submitBtn" class="header__submitBtn" value="Submit">
                 </form>
@@ -28,6 +29,9 @@
             <section class="mainContent">
                 <button class="pageButton--prev pageButton"><i class="fas fa-angle-left"></i></button>
                 <button class="pageButton--next pageButton"><i class="fas fa-angle-right"></i></button>
+                <div class="spinnerContainer">
+                    <i class="fas fa-sync-alt spinner"></i>
+                </div>
             </section>
         </div>
     </main>
