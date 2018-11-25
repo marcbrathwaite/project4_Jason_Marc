@@ -10,9 +10,7 @@
         font-size: 6rem;
         color: #2f0601;
         position: fixed;
-        // position: absolute;
         top: 50vh;
-        // opacity: 0;
         display: none;
         transform: translateY(-50%);
 
@@ -123,5 +121,32 @@
     .errorText {
         text-align: center;
         color: #2f0601;
+        margin: 200px 0;
     }
+
+    .spinnerContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .spinner {
+            display: none;
+            margin: 200px 0;
+            font-size: 6rem;
+            animation: spin 1.5s linear infinite;
+        }
+    }
+
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
 }

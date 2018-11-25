@@ -3,25 +3,24 @@ const foodApp = {};
 $.ajaxSettings.traditional = true;
 
 foodApp.init = function () {
-    //Array of arrays, each containing the what should be displayed on the correspoding page on the DOM
-    foodApp.pages = [];
-
-    //Array to store all results of searches
-    foodApp.itemsArray = [];
-
-
+    foodApp.resetAppVariables();
     //Number of items which would be displayed per page
     foodApp.itemsPerPage = 6;
-
-    //Variable for storing the number of pages of results
-    foodApp.numofPages = 0;
-
-    //Variable for keeping track of current page
-    foodApp.currentPage = 0;
-
     //Initialize even listeners
     foodApp.events();
 }
+
+foodApp.resetAppVariables = function() {
+    //Array of arrays, each containing the what should be displayed on the correspoding page on the DOM
+    foodApp.pages = [];
+    //Array to store all results of searches
+    foodApp.itemsArray = [];
+    //Variable for storing the number of pages of results
+    foodApp.numofPages = 0;
+    //Variable for keeping track of current page
+    foodApp.currentPage = 0;
+}
+
 
 //Function to move the scrollbar to the top of the mainContent section
 foodApp.scrollMain = function (duration) {
@@ -31,7 +30,6 @@ foodApp.scrollMain = function (duration) {
 }
 
 foodApp.events = function () {
-
     //Listen for scroll and show page buttons upon certain scroll height
     $(window).on('scroll', function () {
         let y = $(window).scrollTop();
@@ -53,64 +51,49 @@ foodApp.events = function () {
     // Get search term and value of search type=nutritional. Save value in variable
     $('#submitBtn').on('click', function (event) {
         event.preventDefault();
-        $('.errorText').remove();
-
         // Retrieves seachTerm value from search box
         const searchTerm = $('#searchField').val();
-
         //Create promise for food item search
         foodApp.getFoodItems(searchTerm);
-
         // Clear search field
         $('#searchField').val('');
-
     });
 
     //Click next arrow
     $('.mainContent').on('click', '.pageButton--next', function () {
         //Clear the dom
-        foodApp.clearDOM();
+        foodApp.clearResults();
         //Increment current page
         foodApp.currentPage++;
-
         //Temporarily hide next button on click
         foodApp.buttonDelay();
-
         //Display content on page
         foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage);
-
-
         //Display prev arrow if page counter == 1
         if (foodApp.currentPage === 1) {
             $('.pageButton--prev').show();
         }
-
         //Hide next arrow if current page === pages.length
         if (foodApp.currentPage === foodApp.pages.length - 1) {
             $('.pageButton--next').hide();
         }
-
-    })
+    });
 
     //Click prev arrow
     $('.mainContent').on('click', '.pageButton--prev', function () {
         //Clear the dom
-        foodApp.clearDOM();
+        foodApp.clearResults();
         //Decrease page counter
         foodApp.currentPage--;
-
         //Display content on page
         foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage);
-
         // Temporarily hide next button on click
         foodApp.buttonDelay();
-
         //Hide prev arrow if page counter === 0
         if (foodApp.currentPage === 0) {
             $('.pageButton--prev').hide();
         }
-
-    })
+    });
 }
 
 foodApp.apiKeyUSDA = 'TqiCp1WcVXZzchDeT3DL0M8mk2OrOirzhkXgTrwa';
@@ -161,15 +144,36 @@ foodApp.generatePages = function (objectArr) {
 
 }
 
+foodApp.showSpinner = function() {
+    $('.spinner').show();
+}
+
+foodApp.hideSpinner = function() {
+    $('.spinner').hide();
+}
+
+foodApp.showMainContent = function() {
+    $('.mainContent').show();
+}
 //Function to query USDA database and display nutrient info for each result
 foodApp.getFoodItems = function (search) {
     //If search is not empty or doesnt contain only spaces
     if (search.length !== 0 && !/^ +$/.test(search)) {
-        //Clear DOM of all content
-        foodApp.clearDOM();
+        //Remove error text
+        $('.errorText').remove();
+        //Clear Results from DOM
+        foodApp.clearResults();
         $('.mainContent').hide();
         $('.pageButton--prev').hide();
         $('.pageButton--next').hide();
+        //Reset app variables
+        foodApp.resetAppVariables()
+        //Show main content
+        foodApp.showMainContent();
+        //Show Spinner
+        foodApp.showSpinner();
+        foodApp.scrollMain(500);
+        
         const foodItemPromise = $.ajax({
             url: '//api.nal.usda.gov/ndb/',
             datatype: 'json',
@@ -225,32 +229,51 @@ foodApp.getFoodItems = function (search) {
 
                             foodApp.generatePages(nutrientsArr);
                             foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
+                        }).fail(() => {
+                            foodApp.hideSpinner();
+                            foodApp.displayAPIError;
+                            foodApp.showMainContent();
+                            foodApp.scrollMain(500);
                         });
                 } else {
-
+                    foodApp.hideSpinner();
                     foodApp.displaySearchError();
+                    foodApp.showMainContent();
+                    foodApp.scrollMain(500);
                 }
+            }).fail(() => {
+                foodApp.hideSpinner();
+                foodApp.displayAPIError;
+                foodApp.showMainContent();
+                foodApp.scrollMain(500);
+
             });
     }
 };
 
-//Function to display message letting user that no results were returned for the input
+//Function to display message letting user know that no results were returned for their input
 foodApp.displaySearchError = function () {
-    const searchErrorHTML = `<h2 class="errorText">No results were found for that search term. Please change your search term and try again</h2>`;
+    const searchErrorHTML = `<h2 class="errorText">No results were found for that search term. Please change your search term and try again!</h2>`;
 
     $('.mainContent').append(searchErrorHTML);
-    $('.mainContent').show();
-    foodApp.scrollMain(500);
-
+    
 }
+//Function to display message letting user that there are issues with the API
+foodApp.displayAPIError = function() {
+    const searchErrorHTML = `<h2 class="errorText">We are experiencing issues retrieving results from the USDA Food Composition API. Please wait 15 minutes and try again</h2>`;
+
+    $('.mainContent').append(searchErrorHTML);
+}
+
 foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
     let foodNutrientsHTML = '<div class="nutrientListBlock"><ul class="nutrientList">';
 
     arr[arrIndex].forEach((elem) => {
+        //Remove ampersand unicode from name, and get the first 40 characters of the name and add '...' to it
         const shortName = elem.name
             .replace(/amp\;/ig, '')
-            .replace(/^([\w\&\\\:\,\'\/\;\.\-\+\=\% ]{40})([\w\&\\\,\:\;\'\/\;\.\-\+\=\% ]*)/ig, (matchedString, first, second) => {
+            .replace(/^([\w\&\\\:\,\'\/\;\.\-\+\=\%\!\#\@\(\)\<\>\{\}\? ]{40})([\w\&\\\,\:\;\'\/\;\.\-\+\=\%\!\#\@\(\)\<\>\{\}\? ]*)/ig, (matchedString, first, second) => {
                 return `${first}...`;
             });
 
@@ -293,13 +316,14 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
     $('.mainContent').append(foodNutrientsHTML);
     $('.nutrientListBlock').show();
-    $('.mainContent').show();
-    foodApp.scrollMain(500);
+    foodApp.hideSpinner();
+    foodApp.showMainContent();
+    foodApp.scrollMain(100);
 
 }
 
-// Erase any current html in aside list and main section
-foodApp.clearDOM = function () {
+// Clear results from the page
+foodApp.clearResults = function () {
     $('.nutrientList').empty();
 }
 
