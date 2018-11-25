@@ -166,10 +166,10 @@ foodApp.getFoodItems = function (search) {
     //If search is not empty or doesnt contain only spaces
     if (search.length !== 0 && !/^ +$/.test(search)) {
         //Clear DOM of all content
-         foodApp.clearDOM();
-         $('.mainContent').hide();
-         $('.pageButton--prev').hide();
-         $('.pageButton--next').hide();
+        foodApp.clearDOM();
+        $('.mainContent').hide();
+        $('.pageButton--prev').hide();
+        $('.pageButton--next').hide();
         const foodItemPromise = $.ajax({
             url: 'http://api.nal.usda.gov/ndb/',
             datatype: 'json',
@@ -182,18 +182,18 @@ foodApp.getFoodItems = function (search) {
                 nutrients: 'y'
             }
         });
-    
+
         //AJAX API request for Foot Item search term to get ndbno numbers
         $.when(foodItemPromise)
             .then((res) => {
                 if (res.list) {
                     const foodItemArray = res.list.item;
-                    
+
                     //Generate an array of ndbno numbers
                     const ndbnoArr = foodItemArray.map((elem) => {
                         return elem['ndbno'];
                     });
-        
+
                     //Generate an array of promises with ndbno search
                     const nutrientPromises = ndbnoArr.map((elem) => {
                         return $.ajax({
@@ -209,25 +209,25 @@ foodApp.getFoodItems = function (search) {
                             }
                         });
                     });
-        
+
                     $.when(...nutrientPromises)
                         .then((...res) => {
-                            
-                            let nutrientsArr =[];
+
+                            let nutrientsArr = [];
                             //Handles the scenario for multiple results
-                            if(typeof res[0][0] !== 'undefined') {
+                            if (typeof res[0][0] !== 'undefined') {
                                 nutrientsArr = res.map((elem) => {
                                     return elem[0].report.foods[0];
                                 });
                             } else { //Handles the scenario when only one result is returned
-                                   nutrientsArr.push(res[0].report.foods[0]);
+                                nutrientsArr.push(res[0].report.foods[0]);
                             }
-    
+
                             foodApp.generatePages(nutrientsArr);
                             foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
                         });
                 } else {
-                    
+
                     foodApp.displaySearchError();
                 }
             });
@@ -235,13 +235,13 @@ foodApp.getFoodItems = function (search) {
 };
 
 //Function to display message letting user that no results were returned for the input
-foodApp.displaySearchError = function() {
+foodApp.displaySearchError = function () {
     const searchErrorHTML = `<h2 class="errorText">No results were found for that search term. Please change your search term and try again</h2>`;
 
     $('.mainContent').append(searchErrorHTML);
     $('.mainContent').show();
     foodApp.scrollMain(500);
-    
+
 }
 foodApp.displayNutritionalInfo = function (arr, arrIndex) {
 
