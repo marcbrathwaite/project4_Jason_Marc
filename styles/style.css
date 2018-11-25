@@ -155,6 +155,12 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
   margin: 0;
   padding: 0; }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif; }
+
+a, li, input {
+  font-family: 'Source Sans Pro', sans-serif; }
+
 .wrapper {
   max-width: 1280px;
   width: 90%;
@@ -162,9 +168,59 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
 
 .header {
   height: 100vh;
-  background: olivedrab;
+  background: url(../assets/food-hero-image.jpg);
+  background-size: cover;
   position: relative;
   z-index: 100; }
+  .header--overlay {
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.4)));
+    background: -webkit-linear-gradient(top rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+    background: -o-linear-gradient(top rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+    background: linear-gradient(to bottom rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)); }
+  .header .wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 100vh; }
+  .header__title {
+    font-size: 7rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; }
+  .header__searchForm {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center; }
+  .header__searchField {
+    width: 50%;
+    padding: 20px;
+    font-size: 2.2rem;
+    border: none; }
+  .header__submitBtn {
+    width: 15%;
+    border: none;
+    background: #a3e7fc;
+    color: #2f0601;
+    font-size: 2.2rem;
+    text-transform: uppercase; }
+    .header__submitBtn:hover {
+      background: #2f0601;
+      color: #a3e7fc; }
 
 .mainContent {
   position: relative;
@@ -175,6 +231,7 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
     border: none;
     background-color: transparent;
     font-size: 6rem;
+    color: #2f0601;
     position: fixed;
     top: 50vh;
     display: none;
@@ -192,9 +249,9 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     list-style: none;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between; }
+    letter-spacing: 1px;
+    -ms-flex-pack: distribute;
+    justify-content: space-around; }
     .mainContent .nutrientList__Container {
       width: calc(33.33% - 20px);
       padding: 10px;
@@ -216,12 +273,14 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
     .mainContent .nutrientList li {
       list-style: none; }
     .mainContent .nutrientList__FoodName {
-      font-size: 2rem;
+      font-size: 2.7rem;
       margin-bottom: 10px;
       text-align: center;
       color: white;
+      text-shadow: 2px 2px 3px black;
       line-height: 1.3;
       height: 100%;
+      font-family: 'Playfair Display', serif;
       text-transform: uppercase;
       background: url(../assets/food-label-background.jpg);
       background-size: cover;
@@ -277,6 +336,9 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
         font-weight: normal;
         display: inline-block;
         padding-right: 10px; }
+  .mainContent .errorText {
+    text-align: center;
+    color: #2f0601; }
 
 .footer {
   background: black;
@@ -285,3 +347,8 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
     text-align: center;
     padding: 20px 0;
     margin: 0; }
+    .footer__text a {
+      text-decoration: none;
+      color: white; }
+      .footer__text a:hover {
+        text-decoration: underline; }

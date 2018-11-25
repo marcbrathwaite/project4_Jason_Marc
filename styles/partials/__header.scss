@@ -1,6 +1,48 @@
 .header {
     height: 100vh;
-    background: olivedrab;
+    background: url(../assets/food-hero-image.jpg);
+    // Photo by Brooke Lark on Unsplash: https://unsplash.com/photos/jUPOXXRNdcA
+    background-size: cover;
     position: relative;
     z-index: 100;
+    &--overlay {
+        background: linear-gradient(to bottom rgba(0,0,0,0.4), rgba(0,0,0,0.4));
+    }
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;;
+    }
+    &__title {
+        font-size: 7rem;
+        color: #96e6b3;
+        text-shadow: 2px 2px 3px black;
+        margin-bottom: 20px;
+        text-transform: capitalize;
+    }
+    &__searchForm {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    &__searchField {
+        width: 50%;
+        padding: 20px;
+        font-size: 2.2rem;
+        border: none;
+    }
+    &__submitBtn {
+        width: 15%;
+        border: none;
+        background: #a3e7fc;
+        color: #2f0601;
+        font-size: 2.2rem;
+        text-transform: uppercase;
+        &:hover {
+            background: #2f0601;
+            color: #a3e7fc;
+        }
+    }
 }

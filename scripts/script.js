@@ -230,6 +230,7 @@ foodApp.getFoodItems = function (search) {
                     const nutrientsArr = res.map((elem) => {
                         return elem[0].report.foods[0];
                     });
+                    
 
                     foodApp.generatePages(nutrientsArr);
                     foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)

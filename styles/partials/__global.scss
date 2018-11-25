@@ -3,6 +3,14 @@ h1, h2, h3, h4, h5, h6, ul, li, a, input {
     padding: 0;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+};
+
+a, li, input {
+    font-family: 'Source Sans Pro', sans-serif;
+};
+
 .wrapper {
     max-width: 1280px;
     width: 90%;
