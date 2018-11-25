@@ -166,6 +166,20 @@ a, li, input {
   width: 90%;
   margin: 0 auto; }
 
+@media (max-width: 1040px) {
+  .header__title {
+    font-size: 9rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; }
+  .header__subTitle {
+    font-size: 3.5rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; } }
+
 .header {
   height: 100vh;
   background: url(../assets/food-hero-image.jpg);
@@ -193,7 +207,13 @@ a, li, input {
     align-items: center;
     height: 100vh; }
   .header__title {
-    font-size: 7rem;
+    font-size: 11rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; }
+  .header__subTitle {
+    font-size: 4.5rem;
     color: #96e6b3;
     text-shadow: 2px 2px 3px black;
     margin-bottom: 20px;
@@ -222,6 +242,95 @@ a, li, input {
       background: #2f0601;
       color: #a3e7fc; }
 
+@media (max-width: 1040px) {
+  .header__title {
+    font-size: 10rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; }
+  .header__subTitle {
+    font-size: 4rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; }
+  .header__searchField {
+    width: 60%; }
+  .header__submitBtn {
+    width: 20%; } }
+
+@media (max-width: 926px) {
+  .header__title {
+    font-size: 9rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; }
+  .header__subTitle {
+    font-size: 3.3rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; } }
+
+@media (max-width: 767px) {
+  .header__title {
+    font-size: 8rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; }
+  .header__subTitle {
+    font-size: 2.5rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; } }
+
+@media (max-width: 650px) {
+  .header__title {
+    font-size: 7rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; }
+  .header__subTitle {
+    font-size: 2.2rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; } }
+
+@media (max-width: 517px) {
+  .header__title {
+    font-size: 6.5rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize; }
+  .header__subTitle {
+    font-size: 1.8rem;
+    color: #96e6b3;
+    text-shadow: 2px 2px 3px black;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+    text-align: center; }
+  .header__searchForm {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 100%; }
+  .header__searchField {
+    width: calc(100% - 10px);
+    padding: 20px 0;
+    padding-left: 10px;
+    text-align: center; }
+  .header__submitBtn {
+    width: 100%;
+    padding: 10px 0; } }
+
 .mainContent {
   position: relative;
   padding-top: 7vh;
@@ -229,7 +338,7 @@ a, li, input {
   display: none; }
   .mainContent .pageButton {
     border: none;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: transparent;
     font-size: 6rem;
     color: #2f0601;
     position: fixed;
@@ -295,6 +404,7 @@ a, li, input {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
+        border: 1px solid black;
         -webkit-box-orient: vertical;
         -webkit-box-direction: normal;
         -ms-flex-direction: column;
@@ -355,7 +465,8 @@ a, li, input {
       margin: 200px 0;
       font-size: 6rem;
       -webkit-animation: spin 1.5s linear infinite;
-      animation: spin 1.5s linear infinite; }
+      animation: spin 1.5s linear infinite;
+      color: #2f0601; }
 
 @-webkit-keyframes spin {
   0% {
@@ -372,6 +483,22 @@ a, li, input {
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
+
+@media (max-width: 1040px) {
+  .mainContent .nutrientList__Container {
+    width: calc(50% - 20px); }
+  .mainContent .pageButton--next {
+    right: 10px; }
+  .mainContent .pageButton--prev {
+    left: 10px; } }
+
+@media (max-width: 650px) {
+  .mainContent .nutrientList__Container {
+    width: 100%; }
+  .mainContent .pageButton--next {
+    right: -10px; }
+  .mainContent .pageButton--prev {
+    left: -10px; } }
 
 .footer {
   background: black;
