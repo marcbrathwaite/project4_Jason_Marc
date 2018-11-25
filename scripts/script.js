@@ -21,7 +21,6 @@ foodApp.resetAppVariables = function() {
     foodApp.currentPage = 0;
 }
 
-
 //Function to move the scrollbar to the top of the mainContent section
 foodApp.scrollMain = function (duration) {
     $('html, body').animate({
@@ -260,7 +259,7 @@ foodApp.displaySearchError = function () {
 }
 //Function to display message letting user that there are issues with the API
 foodApp.displayAPIError = function() {
-    const searchErrorHTML = `<h2 class="errorText">We are experiencing issues retrieving results from the USDA Food Composition API. Please wait 15 minutes and try again</h2>`;
+    const searchErrorHTML = `<h2 class="errorText">We are experiencing issues retrieving results from the USDA Food Composition API. Please wait 15 minutes and try again!</h2>`;
 
     $('.mainContent').append(searchErrorHTML);
 }
