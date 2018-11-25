@@ -171,7 +171,7 @@ foodApp.getFoodItems = function (search) {
         $('.pageButton--prev').hide();
         $('.pageButton--next').hide();
         const foodItemPromise = $.ajax({
-            url: 'http://api.nal.usda.gov/ndb/',
+            url: '//api.nal.usda.gov/ndb/',
             datatype: 'json',
             method: 'GET',
             data: {
@@ -197,7 +197,7 @@ foodApp.getFoodItems = function (search) {
                     //Generate an array of promises with ndbno search
                     const nutrientPromises = ndbnoArr.map((elem) => {
                         return $.ajax({
-                            url: 'https://api.nal.usda.gov/ndb/nutrients',
+                            url: '//api.nal.usda.gov/ndb/nutrients',
                             dataType: 'json',
                             method: 'GET',
                             data: {
