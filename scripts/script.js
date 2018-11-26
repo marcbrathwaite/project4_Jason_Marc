@@ -230,7 +230,7 @@ foodApp.getFoodItems = function (search) {
                             foodApp.displayNutritionalInfo(foodApp.pages, foodApp.currentPage)
                         }).fail(() => {
                             foodApp.hideSpinner();
-                            foodApp.displayAPIError;
+                            foodApp.displayAPIError();
                             foodApp.showMainContent();
                             foodApp.scrollMain(500);
                         });
@@ -242,7 +242,7 @@ foodApp.getFoodItems = function (search) {
                 }
             }).fail(() => {
                 foodApp.hideSpinner();
-                foodApp.displayAPIError;
+                foodApp.displayAPIError();
                 foodApp.showMainContent();
                 foodApp.scrollMain(500);
 
