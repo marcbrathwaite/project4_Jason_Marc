@@ -166,19 +166,9 @@ a, li, input {
   width: 90%;
   margin: 0 auto; }
 
-@media (max-width: 1040px) {
-  .header__title {
-    font-size: 9rem;
-    color: #96e6b3;
-    text-shadow: 2px 2px 3px black;
-    margin-bottom: 20px;
-    text-transform: capitalize; }
-  .header__subTitle {
-    font-size: 3.5rem;
-    color: #96e6b3;
-    text-shadow: 2px 2px 3px black;
-    margin-bottom: 20px;
-    text-transform: capitalize; } }
+@media (max-width: 517px) {
+  .wrapper {
+    width: 80%; } }
 
 .header {
   height: 100vh;
@@ -338,7 +328,7 @@ a, li, input {
   display: none; }
   .mainContent .pageButton {
     border: none;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: transparent;
     font-size: 6rem;
     color: #2f0601;
     position: fixed;
@@ -496,9 +486,9 @@ a, li, input {
   .mainContent .nutrientList__Container {
     width: 100%; }
   .mainContent .pageButton--next {
-    right: -10px; }
+    right: -5px; }
   .mainContent .pageButton--prev {
-    left: -10px; } }
+    left: -5px; } }
 
 .footer {
   background: black;
