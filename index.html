@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <title>NutriWeb</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+        crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700,700i|Source+Sans+Pro" rel="stylesheet">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
@@ -29,8 +30,25 @@
     <main>
         <div class="wrapper">
             <section class="mainContent">
-                <button class="pageButton--prev pageButton"><i class="fas fa-angle-left"></i></button>
-                <button class="pageButton--next pageButton"><i class="fas fa-angle-right"></i></button>
+                <div class="arrowContainer">
+                    <button class="pageButton--prev pageButton">
+                        <i class="fas fa-angle-left"></i>
+                    </button>
+                    <button class="pageButton--next pageButton">
+                        <i class="fas fa-angle-right"></i>
+                    </button>
+                </div>
+                <div class="arrowContainer--Mobile">
+                    <button class="pageButtonMobile--prev pageButtonMobile">
+                        <span class="arrowText">Prev.</span>
+                        <i class="fas fa-angle-left"></i>
+                    </button>
+                    <button class="pageButtonMobile--next pageButtonMobile">
+                        <i class="fas fa-angle-right"></i>
+                        <span class="arrowText">Next</span>
+                    </button>
+                </div>
+
                 <div class="spinnerContainer">
                     <i class="fas fa-sync-alt spinner"></i>
                 </div>
@@ -38,11 +56,13 @@
         </div>
     </main>
     <footer class="footer">
-        <p class="footer__text">&copy; Code-Trotters - <a href="" target="_blank"> Jason Mortfield </a> &amp; <a href="http://www.brathworks.com/" target="_blank"> Marc
+        <p class="footer__text">&copy; Code-Trotters - <a href="" target="_blank"> Jason Mortfield </a> &amp; <a href="http://www.brathworks.com/"
+                target="_blank"> Marc
                 Brathwaite </a> 2018</p>
     </footer>
 
-    <script src='//code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=' crossorigin='anonymous'></script>
+    <script src='//code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4='
+        crossorigin='anonymous'></script>
     <script src="scripts/script.js"></script>
 
 </body>

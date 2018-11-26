@@ -10,7 +10,7 @@ foodApp.init = function () {
     foodApp.events();
 }
 
-foodApp.resetAppVariables = function() {
+foodApp.resetAppVariables = function () {
     //Array of arrays, each containing the what should be displayed on the correspoding page on the DOM
     foodApp.pages = [];
     //Array to store all results of searches
@@ -59,7 +59,7 @@ foodApp.events = function () {
     });
 
     //Click next arrow
-    $('.mainContent').on('click', '.pageButton--next', function () {
+    $('.mainContent').on('click', '.pageButton--next,.pageButtonMobile--next', function () {
         //Clear the dom
         foodApp.clearResults();
         //Increment current page
@@ -71,15 +71,18 @@ foodApp.events = function () {
         //Display prev arrow if page counter == 1
         if (foodApp.currentPage === 1) {
             $('.pageButton--prev').show();
+            $('.pageButtonMobile--prev').addClass('pageButtonMobile--flex');
+
         }
         //Hide next arrow if current page === pages.length
         if (foodApp.currentPage === foodApp.pages.length - 1) {
             $('.pageButton--next').hide();
+            $('.pageButtonMobile--next').removeClass('pageButtonMobile--flex');
         }
     });
 
     //Click prev arrow
-    $('.mainContent').on('click', '.pageButton--prev', function () {
+    $('.mainContent').on('click', '.pageButton--prev,.pageButtonMobile--prev', function () {
         //Clear the dom
         foodApp.clearResults();
         //Decrease page counter
@@ -91,6 +94,7 @@ foodApp.events = function () {
         //Hide prev arrow if page counter === 0
         if (foodApp.currentPage === 0) {
             $('.pageButton--prev').hide();
+            $('.pageButtonMobile--prev').removeClass('pageButtonMobile--flex');
         }
     });
 }
@@ -143,15 +147,15 @@ foodApp.generatePages = function (objectArr) {
 
 }
 
-foodApp.showSpinner = function() {
+foodApp.showSpinner = function () {
     $('.spinner').show();
 }
 
-foodApp.hideSpinner = function() {
+foodApp.hideSpinner = function () {
     $('.spinner').hide();
 }
 
-foodApp.showMainContent = function() {
+foodApp.showMainContent = function () {
     $('.mainContent').show();
 }
 //Function to query USDA database and display nutrient info for each result
@@ -165,6 +169,9 @@ foodApp.getFoodItems = function (search) {
         $('.mainContent').hide();
         $('.pageButton--prev').hide();
         $('.pageButton--next').hide();
+        $('.pageButtonMobile--next').removeClass('pageButtonMobile--flex');
+        $('.pageButtonMobile--prev').removeClass('pageButtonMobile--flex');
+
         //Reset app variables
         foodApp.resetAppVariables()
         //Show main content
@@ -172,7 +179,7 @@ foodApp.getFoodItems = function (search) {
         //Show Spinner
         foodApp.showSpinner();
         foodApp.scrollMain(500);
-        
+
         const foodItemPromise = $.ajax({
             url: '//api.nal.usda.gov/ndb/',
             datatype: 'json',
@@ -255,10 +262,10 @@ foodApp.displaySearchError = function () {
     const searchErrorHTML = `<h2 class="errorText">No results were found for that search term. Please change your search term and try again!</h2>`;
 
     $('.mainContent').append(searchErrorHTML);
-    
+
 }
 //Function to display message letting user that there are issues with the API
-foodApp.displayAPIError = function() {
+foodApp.displayAPIError = function () {
     const searchErrorHTML = `<h2 class="errorText">We are experiencing issues retrieving results from the USDA Food Composition API. Please wait 15 minutes and try again!</h2>`;
 
     $('.mainContent').append(searchErrorHTML);
@@ -316,6 +323,12 @@ foodApp.displayNutritionalInfo = function (arr, arrIndex) {
     $('.mainContent').append(foodNutrientsHTML);
     $('.nutrientListBlock').show();
     foodApp.hideSpinner();
+    //Show next button
+    console.log(foodApp.numofPages);
+    //For mobile
+    if (foodApp.numofPages > 1) {
+        $('.pageButtonMobile--next').addClass('pageButtonMobile--flex');
+    }
     foodApp.showMainContent();
     foodApp.scrollMain(100);
 

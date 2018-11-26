@@ -461,6 +461,29 @@ input[type="search"], input[type="submit"] {
       -webkit-animation: spin 1.5s linear infinite;
       animation: spin 1.5s linear infinite;
       color: #2f0601; }
+  .mainContent .arrowContainer--Mobile {
+    display: none; }
+  .mainContent .arrowText {
+    display: block;
+    font-size: 2.5rem; }
+  .mainContent .pageButtonMobile {
+    display: none;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 6rem;
+    color: #2f0601; }
+    .mainContent .pageButtonMobile--next i {
+      margin-right: 5px; }
+    .mainContent .pageButtonMobile--flex {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center; }
 
 @-webkit-keyframes spin {
   0% {
@@ -484,7 +507,19 @@ input[type="search"], input[type="submit"] {
   .mainContent .pageButton--next {
     right: 10px; }
   .mainContent .pageButton--prev {
-    left: 10px; } }
+    left: 10px; }
+  .mainContent .arrowContainer {
+    display: none; }
+  .mainContent .arrowContainer--Mobile {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; } }
 
 @media (max-width: 650px) {
   .mainContent .nutrientList__Container {
@@ -493,6 +528,10 @@ input[type="search"], input[type="submit"] {
     right: -5px; }
   .mainContent .pageButton--prev {
     left: -5px; } }
+
+@media (max-width: 375px) {
+  .mainContent .nutrientList__FoodName {
+    font-size: 2.2rem; } }
 
 .footer {
   background: black;

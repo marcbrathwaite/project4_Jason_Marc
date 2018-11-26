@@ -29,6 +29,7 @@
         list-style: none;
         letter-spacing: 1px;
         justify-content: space-around;
+
         &__Container {
             width: calc(33.33% - 20px);
             padding: 10px;
@@ -118,6 +119,7 @@
             }
         }
     }
+
     .errorText {
         text-align: center;
         color: $accentColour;
@@ -138,6 +140,32 @@
         }
     }
 
+    .arrowContainer--Mobile {
+        display: none;
+    }
+
+    .arrowText {
+        display: block;
+        font-size: 2.5rem;
+    }
+
+    .pageButtonMobile {
+        display: none;
+        border: none;
+        background-color: rgba(0, 0, 0, 0);
+        font-size: 6rem;
+        color: $accentColour;
+        
+        &--next i {
+            margin-right: 5px;
+        }
+        &--flex {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+
 }
 
 @keyframes spin {
@@ -152,22 +180,37 @@
 
 }
 
-@media (max-width: 1040px) {
+@media (max-width: 1040px) { //1040
     .mainContent {
         .nutrientList {
             &__Container {
                 width: calc(50% - 20px);
             }
         }
+
         .pageButton {
             &--next {
                 right: 10px;
             }
+
             &--prev {
                 left: 10px;
             }
         }
+
+        .arrowContainer {
+            display: none;
+        }
+    
+    
+        .arrowContainer--Mobile {
+            display: flex;
+            justify-content: center;
+            align-items: center
+        }
+
     }
+
 }
 
 @media (max-width: 650px) {
@@ -177,13 +220,23 @@
                 width: 100%;
             }
         }
+
         .pageButton {
             &--next {
                 right: -5px;
             }
+
             &--prev {
                 left: -5px;
             }
+        }
+    }
+}
+
+@media (max-width: 375px) {
+    .mainContent {
+        .nutrientList__FoodName {
+            font-size: 2.2rem;
         }
     }
 }
