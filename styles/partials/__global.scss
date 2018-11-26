@@ -29,13 +29,8 @@ $accentColour: #2f0601;
         text-transform: capitalize;
 }
 
-@media (max-width: 1040px) {
-    .header {
-        &__title {
-            @include primaryFont(9rem);
-        }
-        &__subTitle {
-            @include primaryFont(3.5rem);
-        }
+@media (max-width: 517px) {
+    .wrapper {
+        width: 80%;
     }
 }
